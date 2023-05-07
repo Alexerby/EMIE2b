@@ -5,13 +5,9 @@ library(dynlm)
 # Load dataset IncomeUK (from package Ecdat)
 data(IncomeUK, package = "Ecdat")
 
-# Specify model using the lm() function from the package dynlm.
-# We here define our model where income is a model of the first order lag
-# for different p
-
-#############################################################################
-#                               QUESTION 1                                  #
-#############################################################################
+################################################################################
+#                                   QUESTION 1                                 #
+################################################################################
 
 # Defining models
 
@@ -30,9 +26,9 @@ summary(model4)
 summary(model5)
 
 
-#############################################################################
-#                               QUESTION 2                                  #
-#############################################################################
+################################################################################
+#                                   QUESTION 2                                 #
+################################################################################
 
 # Calculating the AIC for the different models
 aic.values <- c(AIC(model1), AIC(model2), AIC(model3), AIC(model4), AIC(model5))
@@ -40,3 +36,8 @@ aic.values <- c(AIC(model1), AIC(model2), AIC(model3), AIC(model4), AIC(model5))
 # Determine the minimum value of the models
 best.model.aic <- which.min(aic.values)
 cat("Best model based on AIC: ", best.model.aic, "\n")
+
+
+################################################################################
+#                                   QUESTION 3                                 #
+################################################################################
