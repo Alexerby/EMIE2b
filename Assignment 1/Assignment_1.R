@@ -1,22 +1,42 @@
-#################################################################
-#                           QUESTION 1                          #
-#################################################################
-
 # Load required libraries
 library(Ecdat)
 library(dynlm)
 
 # Load dataset IncomeUK (from package Ecdat)
-data(IncomeUK)
+data(IncomeUK, package = "Ecdat")
 
-# Specify model using the dynlm() function from the package dynlm.
+# Specify model using the lm() function from the package dynlm.
 # We here define our model where income is a model of the first order lag
-# with p = 1, 2, 3, 4, 5. In the last argument we specify what dataset to use
-model <- dynlm(income ~ L(d(income), 1:5), data = IncomeUK)
+# for different p
 
-# Produce results of our defined model by calling summary() and providing our model as an argument
-summary(model)
+#############################################################################
+#                               QUESTION 1                                  #
+#############################################################################
 
-#################################################################
-#                           QUESTION 2                          #
-#################################################################
+# Defining models
+
+model1 <- dynlm(income ~ L(income, 1), data = IncomeUK)
+model2 <- dynlm(income ~ L(income, 1:2), data = IncomeUK)
+model3 <- dynlm(income ~ L(income, 1:3), data = IncomeUK)
+model4 <- dynlm(income ~ L(income, 1:4), data = IncomeUK)
+model5 <- dynlm(income ~ L(income, 1:5), data = IncomeUK)
+
+
+# Producing outputs by calling the summary() function
+summary(model1)
+summary(model2)
+summary(model3)
+summary(model4)
+summary(model5)
+
+
+#############################################################################
+#                               QUESTION 2                                  #
+#############################################################################
+
+# Calculating the AIC for the different models
+aic.values <- c(AIC(model1), AIC(model2), AIC(model3), AIC(model4), AIC(model5))
+
+# Determine the minimum value of the models
+best.model.aic <- which.min(aic.values)
+cat("Best model based on AIC: ", best.model.aic, "\n")
