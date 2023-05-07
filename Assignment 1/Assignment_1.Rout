@@ -1,0 +1,209 @@
+
+R version 4.3.0 (2023-04-21 ucrt) -- "Already Tomorrow"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Load required libraries
+> library(Ecdat)
+Loading required package: Ecfun
+
+Attaching package: 'Ecfun'
+
+The following object is masked from 'package:base':
+
+    sign
+
+
+Attaching package: 'Ecdat'
+
+The following object is masked from 'package:datasets':
+
+    Orange
+
+> library(dynlm)
+Loading required package: zoo
+
+Attaching package: 'zoo'
+
+The following objects are masked from 'package:base':
+
+    as.Date, as.Date.numeric
+
+> 
+> # Load dataset IncomeUK (from package Ecdat)
+> data(IncomeUK, package = "Ecdat")
+> 
+> ################################################################################
+> #                                   QUESTION 1                                 #
+> ################################################################################
+> 
+> # Defining models
+> model1 <- dynlm(income ~ L(income, 1), data = IncomeUK)
+> model2 <- dynlm(income ~ L(income, 1:2), data = IncomeUK)
+> model3 <- dynlm(income ~ L(income, 1:3), data = IncomeUK)
+> model4 <- dynlm(income ~ L(income, 1:4), data = IncomeUK)
+> model5 <- dynlm(income ~ L(income, 1:5), data = IncomeUK)
+> 
+> 
+> # Producing outputs by calling the summary() function
+> summary(model1)
+
+Time series regression with "ts" data:
+Start = 1971(2), End = 1985(2)
+
+Call:
+dynlm(formula = income ~ L(income, 1), data = IncomeUK)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2107.27  -517.31   -51.64   386.32  2023.85 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  4.962e+02  2.150e+02   2.308   0.0248 *  
+L(income, 1) 1.013e+00  6.351e-03 159.512   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 743.7 on 55 degrees of freedom
+Multiple R-squared:  0.9978,	Adjusted R-squared:  0.9978 
+F-statistic: 2.544e+04 on 1 and 55 DF,  p-value: < 2.2e-16
+
+> summary(model2)
+
+Time series regression with "ts" data:
+Start = 1971(3), End = 1985(2)
+
+Call:
+dynlm(formula = income ~ L(income, 1:2), data = IncomeUK)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1656.7  -445.0  -108.0   391.2  2444.4 
+
+Coefficients:
+                Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     678.0660   223.1561   3.039  0.00369 ** 
+L(income, 1:2)1   0.6565     0.1377   4.767  1.5e-05 ***
+L(income, 1:2)2   0.3607     0.1392   2.592  0.01231 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 713.8 on 53 degrees of freedom
+Multiple R-squared:  0.998,	Adjusted R-squared:  0.9979 
+F-statistic: 1.336e+04 on 2 and 53 DF,  p-value: < 2.2e-16
+
+> summary(model3)
+
+Time series regression with "ts" data:
+Start = 1971(4), End = 1985(2)
+
+Call:
+dynlm(formula = income ~ L(income, 1:3), data = IncomeUK)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1463.86  -473.49   -76.05   369.98  1994.89 
+
+Coefficients:
+                Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     548.9956   238.6411   2.301  0.02554 *  
+L(income, 1:3)1   0.7172     0.1388   5.166 4.01e-06 ***
+L(income, 1:3)2   0.5880     0.1811   3.247  0.00206 ** 
+L(income, 1:3)3  -0.2938     0.1534  -1.915  0.06110 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 700.3 on 51 degrees of freedom
+Multiple R-squared:  0.9981,	Adjusted R-squared:  0.998 
+F-statistic:  8934 on 3 and 51 DF,  p-value: < 2.2e-16
+
+> summary(model4)
+
+Time series regression with "ts" data:
+Start = 1972(1), End = 1985(2)
+
+Call:
+dynlm(formula = income ~ L(income, 1:4), data = IncomeUK)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1376.82  -470.57   -75.99   351.75  1888.71 
+
+Coefficients:
+                Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     646.6155   254.6001   2.540   0.0143 *  
+L(income, 1:4)1   0.7471     0.1440   5.189 4.03e-06 ***
+L(income, 1:4)2   0.5406     0.1886   2.867   0.0061 ** 
+L(income, 1:4)3  -0.4524     0.2108  -2.146   0.0369 *  
+L(income, 1:4)4   0.1778     0.1608   1.106   0.2742    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 704.1 on 49 degrees of freedom
+Multiple R-squared:  0.9981,	Adjusted R-squared:  0.9979 
+F-statistic:  6393 on 4 and 49 DF,  p-value: < 2.2e-16
+
+> summary(model5)
+
+Time series regression with "ts" data:
+Start = 1972(2), End = 1985(2)
+
+Call:
+dynlm(formula = income ~ L(income, 1:5), data = IncomeUK)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1603.4  -344.4  -144.3   417.2  1846.2 
+
+Coefficients:
+                Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     474.1020   247.2864   1.917  0.06130 .  
+L(income, 1:5)1   0.8012     0.1322   6.061 2.17e-07 ***
+L(income, 1:5)2   0.3974     0.1758   2.260  0.02850 *  
+L(income, 1:5)3  -0.3398     0.1939  -1.753  0.08620 .  
+L(income, 1:5)4   0.6467     0.2015   3.210  0.00240 ** 
+L(income, 1:5)5  -0.5004     0.1478  -3.385  0.00144 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 638.5 on 47 degrees of freedom
+Multiple R-squared:  0.9984,	Adjusted R-squared:  0.9983 
+F-statistic:  5983 on 5 and 47 DF,  p-value: < 2.2e-16
+
+> 
+> 
+> ################################################################################
+> #                                   QUESTION 2                                 #
+> ################################################################################
+> 
+> # Calculating the AIC for the different models
+> aic.values <- c(AIC(model1), AIC(model2), AIC(model3), AIC(model4), AIC(model5))
+> 
+> # Determine the minimum value of the models
+> best.model.aic <- which.min(aic.values)
+> cat("Best model based on AIC: ", best.model.aic, "\n")
+Best model based on AIC:  5 
+> 
+> 
+> ################################################################################
+> #                                   QUESTION 3                                 #
+> ################################################################################
+> 
+> proc.time()
+   user  system elapsed 
+   1.57    0.26    1.85 

@@ -10,7 +10,6 @@ data(IncomeUK, package = "Ecdat")
 ################################################################################
 
 # Defining models
-
 model1 <- dynlm(income ~ L(income, 1), data = IncomeUK)
 model2 <- dynlm(income ~ L(income, 1:2), data = IncomeUK)
 model3 <- dynlm(income ~ L(income, 1:3), data = IncomeUK)
@@ -31,11 +30,11 @@ summary(model5)
 ################################################################################
 
 # Calculating the AIC for the different models
-aic.values <- c(AIC(model1), AIC(model2), AIC(model3), AIC(model4), AIC(model5))
+aic_values <- c(AIC(model1), AIC(model2), AIC(model3), AIC(model4), AIC(model5))
 
 # Determine the minimum value of the models
-best.model.aic <- which.min(aic.values)
-cat("Best model based on AIC: ", best.model.aic, "\n")
+best_model_aic <- which.min(aic_values)
+cat("Best model based on AIC: ", best_model_aic, "\n")
 
 
 ################################################################################
