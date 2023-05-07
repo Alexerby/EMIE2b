@@ -1,0 +1,6 @@
+exportPattern("^[[:alpha:]]+")
+importFrom("stats", "coefficients", "frequency", "is.ts","as.ts", "resid", "ts")
+importFrom("urca", "ur.df", "ur.kpss")
+importFrom("tseries", "jarque.bera.test")
+importFrom("stats", "Box.test")
+import("urca", "vars", "tseries")

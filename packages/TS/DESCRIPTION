@@ -1,0 +1,14 @@
+Package: TS
+Type: Package
+Title: Package with utilities and data for time series courses at SU
+Version: 2.0-2023.1
+Date: 2023-04-18
+Author: Michael Lundholm
+Maintainer: Michael Lundholm <michael.lundholm@ne.su.se>
+Description: Package with utilities and data for the courses EC2405 and EC7413
+  Time series analysis, Department of Economics, Stockholm 
+  University.
+Depends: R (>= 3.5.0), urca, vars, tseries
+License: GPL-2
+NeedsCompilation: no
+Packaged: 2023-04-18 10:06:46 UTC; lundh
