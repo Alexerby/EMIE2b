@@ -47,16 +47,6 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 ################################################################################
 
 
-
-
-# Assign variables of residuals_model_i to the various
-# residuals of the models
-# for (i in 1:5) {
-#     residuals_list[[i]] <- residuals(model_list[[i]])
-#     assign(paste0("residuals_model_", i), residuals_list[[i]])
-# }
-
-
 for (i in 1:length(model_list)) {
     residuals_model <- paste0("residuals_model_", i)
     residuals <- residuals(model_list[[i]])
