@@ -1,0 +1,227 @@
+
+R version 4.3.0 (2023-04-21 ucrt) -- "Already Tomorrow"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Load required libraries
+> library(Ecdat)
+Loading required package: Ecfun
+
+Attaching package: 'Ecfun'
+
+The following object is masked from 'package:base':
+
+    sign
+
+
+Attaching package: 'Ecdat'
+
+The following object is masked from 'package:datasets':
+
+    Orange
+
+> library(dynlm)
+Loading required package: zoo
+
+Attaching package: 'zoo'
+
+The following objects are masked from 'package:base':
+
+    as.Date, as.Date.numeric
+
+> library(TS)
+Loading required package: urca
+Loading required package: vars
+Loading required package: MASS
+
+Attaching package: 'MASS'
+
+The following object is masked from 'package:Ecdat':
+
+    SP500
+
+Loading required package: strucchange
+Loading required package: sandwich
+Loading required package: lmtest
+Loading required package: tseries
+Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+> 
+> 
+> # Load dataset IncomeUK (from package Ecdat)
+> data(IncomeUK, package = "Ecdat")
+> 
+> ################################################################################
+> #                                   QUESTION 1                                 #
+> ################################################################################
+> 
+> # Initialize empty list for the models
+> model_list <- list()
+> 
+> for (i in 1:5) {
++     # Fit the model with the current lag value
++     model <- dynlm(income ~ L(income, 1:i), data = IncomeUK)
++ 
++     # Add the model object to the list
++     model_list[[i]] <- model
++ 
++     # Assign the model object to a variable
++     # with a name that follows the pattern "model_i"
++     assign(paste0("model_", i), model_list[[i]])
++ }
+> 
+> ################################################################################
+> #                                   QUESTION 2                                 #
+> ################################################################################
+> 
+> # Calculating the AIC for the different models
+> aic_values <- c(
++     AIC(model_1),
++     AIC(model_2),
++     AIC(model_3),
++     AIC(model_4),
++     AIC(model_5)
++ )
+> 
+> # Determine the minimum value of the models
+> best_model_aic <- which.min(aic_values)
+> cat("Best model based on AIC: ", best_model_aic, "\n")
+Best model based on AIC:  5 
+> 
+> ################################################################################
+> #                                   QUESTION 3                                 #
+> ################################################################################
+> 
+> for (i in 1:length(model_list)) {
++     # Create variables for each models residuals
++     residuals_model <- paste0("residuals_model_", i)
++     residuals <- residuals(model_list[[i]])
++     assign(residuals_model, residuals)
++ 
++     # Perform Ljung-Box test on residuals
++     cat("\n Ljung-Box output for model", i, ":\n")
++     print(TS::LjungBox(get(residuals_model)))
++ }
+
+ Ljung-Box output for model 1 :
+ lags statistic df      p-value
+    5  23.70999  5 2.468171e-04
+   10  30.74414 10 6.466049e-04
+   15  36.44129 15 1.526142e-03
+   20  48.10539 20 4.111501e-04
+   25  66.18818 25 1.394308e-05
+   30  74.00519 30 1.384196e-05
+
+ Ljung-Box output for model 2 :
+ lags statistic df     p-value
+    5  12.41739  5 0.029495214
+   10  19.34118 10 0.036137122
+   15  25.18198 15 0.047552160
+   20  33.59629 20 0.028988882
+   25  43.50306 25 0.012318677
+   30  51.83262 30 0.007939162
+
+ Ljung-Box output for model 3 :
+ lags statistic df      p-value
+    5  13.38125  5 2.005629e-02
+   10  29.19544 10 1.158409e-03
+   15  39.24185 15 5.896313e-04
+   20  57.41793 20 1.773470e-05
+   25  67.91972 25 7.800740e-06
+   30  80.08469 30 1.920987e-06
+
+ Ljung-Box output for model 4 :
+ lags statistic df      p-value
+    5  12.13491  5 3.298528e-02
+   10  27.17341 10 2.444755e-03
+   15  37.06662 15 1.237464e-03
+   20  51.76301 20 1.232766e-04
+   25  62.30004 25 5.002746e-05
+   30  73.71308 30 1.518836e-05
+
+ Ljung-Box output for model 5 :
+ lags statistic df   p-value
+    5  1.082468  5 0.9556437
+   10  6.347697 10 0.7852545
+   15 12.904921 15 0.6096417
+   20 16.759268 20 0.6685455
+   25 20.941415 25 0.6958718
+   30 27.496746 30 0.5970862
+> 
+> # Assign variable names for ljung-box test called lb_test1,...,lb_test5
+> for (i in 1:5) {
++     lb_test <- TS::LjungBox(get(paste0("residuals_model_", i)))
++     assign(paste0("lb_test", i), lb_test)
++ }
+> 
+> lb_test
+ lags statistic df   p-value
+    5  1.082468  5 0.9556437
+   10  6.347697 10 0.7852545
+   15 12.904921 15 0.6096417
+   20 16.759268 20 0.6685455
+   25 20.941415 25 0.6958718
+   30 27.496746 30 0.5970862
+> 
+> # Compare p-value with a significance level of 5 percent for our models
+> for (i in 1:5) {
++     cat("\nP-values comparing for model", i, ":\n")
++     lb_test <- get(paste0("lb_test", i))
++ 
++     for (j in 1:ncol(lb_test)) {
++         if (lb_test[j, "p-value"] > 0.05) {
++             cat("Lag", lb_test[j, "lags"], "p-value > \u03B1 (0.05) \u27f6 do not reject NULL hypothesis\n")
++         } else {
++             cat("Lag", lb_test[j, "lags"], "has p-value \u2264 \u03B1 (0.05) \u27f6 reject NULL hypothesis.\n")
++         }
++     }
++ }
+
+P-values comparing for model 1 :
+Lag 5 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 10 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 15 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 20 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+
+P-values comparing for model 2 :
+Lag 5 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 10 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 15 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 20 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+
+P-values comparing for model 3 :
+Lag 5 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 10 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 15 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 20 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+
+P-values comparing for model 4 :
+Lag 5 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 10 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 15 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+Lag 20 has p-value ≤ α (0.05) ⟶ reject NULL hypothesis.
+
+P-values comparing for model 5 :
+Lag 5 p-value > α (0.05) ⟶ do not reject NULL hypothesis
+Lag 10 p-value > α (0.05) ⟶ do not reject NULL hypothesis
+Lag 15 p-value > α (0.05) ⟶ do not reject NULL hypothesis
+Lag 20 p-value > α (0.05) ⟶ do not reject NULL hypothesis
+> 
+> proc.time()
+   user  system elapsed 
+   1.90    0.34    2.23 

@@ -47,6 +47,12 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 #                                   QUESTION 3                                 #
 ################################################################################
 
+
+
+#########################################################
+#                   Ljung-Box test                      #
+#########################################################
+
 for (i in 1:length(model_list)) {
     # Create variables for each models residuals
     residuals_model <- paste0("residuals_model_", i)
@@ -58,14 +64,15 @@ for (i in 1:length(model_list)) {
     print(TS::LjungBox(get(residuals_model)))
 }
 
+# Assign variable names for ljung-box test called lb_test1,...,lb_test5
 for (i in 1:5) {
     lb_test <- TS::LjungBox(get(paste0("residuals_model_", i)))
     assign(paste0("lb_test", i), lb_test)
 }
 
+lb_test
 
-# lb_list <- list(lb_test1, lb_test2, lb_test3, lb_test4, lb_test5)
-
+# Compare p-value with a significance level of 5 percent for our models
 for (i in 1:5) {
     cat("\nP-values comparing for model", i, ":\n")
     lb_test <- get(paste0("lb_test", i))
@@ -74,7 +81,13 @@ for (i in 1:5) {
         if (lb_test[j, "p-value"] > 0.05) {
             cat("Lag", lb_test[j, "lags"], "p-value > \u03B1 (0.05) \u27f6 do not reject NULL hypothesis\n")
         } else {
-            cat("Lag", lb_test[j, "lags"], "has p-value \u2264 \u03B1 (0.05) \u27f6  reject NULL hypothesis.\n")
+            cat("Lag", lb_test[j, "lags"], "has p-value \u2264 \u03B1 (0.05) \u27f6 reject NULL hypothesis.\n")
         }
     }
 }
+# We can see from the output of the above that we can not reject
+# H_0 when it comes to income_{t-5}
+
+#########################################################
+#                   Jarque-Bera test                    #
+#########################################################
