@@ -38,8 +38,6 @@ aic_values <- c(
     AIC(model_5)
 )
 
-aic_values
-
 # Determine the minimum value of the models
 best_model_aic <- which.min(aic_values)
 cat("Best model based on AIC: ", best_model_aic, "\n")
@@ -49,12 +47,22 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 ################################################################################
 
 
-residuals_list <- list()
+
+
+# Assign variables of residuals_model_i to the various
+# residuals of the models
+# for (i in 1:5) {
+#     residuals_list[[i]] <- residuals(model_list[[i]])
+#     assign(paste0("residuals_model_", i), residuals_list[[i]])
+# }
+
 
 for (i in 1:length(model_list)) {
-    residuals_list[[i]] <- residuals(model_list[[i]])
-    assign(paste0("residuals_model_", i), residuals_list[[i]])
+    residuals_model <- paste0("residuals_model_", i)
+    residuals <- residuals(model_list[[i]])
+    assign(residuals_model, residuals)
+
+    # Perform Ljung-Box test on residuals
+    cat("\n Ljung-Box output for model", i, ":\n")
+    print(TS::LjungBox(get(residuals_model)))
 }
-
-
-TS::LjungBox(residuals_model_1)
