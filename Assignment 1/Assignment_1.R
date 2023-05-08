@@ -11,6 +11,7 @@ data(IncomeUK, package = "Ecdat")
 #                                   QUESTION 1                                 #
 ################################################################################
 
+# Initialize empty list for the models
 model_list <- list()
 
 for (i in 1:5) {
@@ -46,8 +47,8 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 #                                   QUESTION 3                                 #
 ################################################################################
 
-
 for (i in 1:length(model_list)) {
+    # Create variables for each models residuals
     residuals_model <- paste0("residuals_model_", i)
     residuals <- residuals(model_list[[i]])
     assign(residuals_model, residuals)
@@ -55,4 +56,25 @@ for (i in 1:length(model_list)) {
     # Perform Ljung-Box test on residuals
     cat("\n Ljung-Box output for model", i, ":\n")
     print(TS::LjungBox(get(residuals_model)))
+}
+
+for (i in 1:5) {
+    lb_test <- TS::LjungBox(get(paste0("residuals_model_", i)))
+    assign(paste0("lb_test", i), lb_test)
+}
+
+
+# lb_list <- list(lb_test1, lb_test2, lb_test3, lb_test4, lb_test5)
+
+for (i in 1:5) {
+    cat("\nP-values comparing for model", i, ":\n")
+    lb_test <- get(paste0("lb_test", i))
+
+    for (j in 1:ncol(lb_test)) {
+        if (lb_test[j, "p-value"] > 0.05) {
+            cat("Lag", lb_test[j, "lags"], "p-value > \u03B1 (0.05) \u27f6 do not reject NULL hypothesis\n")
+        } else {
+            cat("Lag", lb_test[j, "lags"], "has p-value \u2264 \u03B1 (0.05) \u27f6  reject NULL hypothesis.\n")
+        }
+    }
 }
