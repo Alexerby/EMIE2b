@@ -61,7 +61,7 @@ Loading required package: tseries
 Registered S3 method overwritten by 'quantmod':
   method            from
   as.zoo.data.frame zoo 
-> 
+> library(tseries)
 > 
 > # Load dataset IncomeUK (from package Ecdat)
 > data(IncomeUK, package = "Ecdat")
@@ -106,6 +106,12 @@ Best model based on AIC:  5
 > ################################################################################
 > #                                   QUESTION 3                                 #
 > ################################################################################
+> 
+> 
+> 
+> #########################################################
+> #                   Ljung-Box test                      #
+> #########################################################
 > 
 > for (i in 1:length(model_list)) {
 +     # Create variables for each models residuals
@@ -169,14 +175,6 @@ Best model based on AIC:  5
 +     assign(paste0("lb_test", i), lb_test)
 + }
 > 
-> lb_test
- lags statistic df   p-value
-    5  1.082468  5 0.9556437
-   10  6.347697 10 0.7852545
-   15 12.904921 15 0.6096417
-   20 16.759268 20 0.6685455
-   25 20.941415 25 0.6958718
-   30 27.496746 30 0.5970862
 > 
 > # Compare p-value with a significance level of 5 percent for our models
 > for (i in 1:5) {
@@ -221,7 +219,74 @@ Lag 5 p-value > α (0.05) ⟶ do not reject NULL hypothesis
 Lag 10 p-value > α (0.05) ⟶ do not reject NULL hypothesis
 Lag 15 p-value > α (0.05) ⟶ do not reject NULL hypothesis
 Lag 20 p-value > α (0.05) ⟶ do not reject NULL hypothesis
+> # We can see from the output of the above that we can not reject
+> # H_0 when it comes to income_{t-5}
 > 
-> proc.time()
-   user  system elapsed 
-   1.90    0.34    2.23 
+> #########################################################
+> #                   Jarque-Bera test                    #
+> #########################################################
+> 
+> for (i in 1:5) {
++     foo <- (get(paste0("residuals_model_", i)))
++     jb_test <- jarque.bera.test(foo)
++     assign(paste0("jb_test", i), jb_test)
++ }
+> 
+> for (i in 1:5) {
++     cat("\n JB-test", i, ":")
++     jb_test <- paste0("jb_test", i)
++     jb_output <- get(jb_test)
++     print(jb_output)
++ }
+
+ JB-test 1 :
+	Jarque Bera Test
+
+data:  foo
+X-squared = 2.7018, df = 2, p-value = 0.259
+
+
+ JB-test 2 :
+	Jarque Bera Test
+
+data:  foo
+X-squared = 12.432, df = 2, p-value = 0.001997
+
+
+ JB-test 3 :
+	Jarque Bera Test
+
+data:  foo
+X-squared = 3.3373, df = 2, p-value = 0.1885
+
+
+ JB-test 4 :
+	Jarque Bera Test
+
+data:  foo
+X-squared = 4.1664, df = 2, p-value = 0.1245
+
+
+ JB-test 5 :
+	Jarque Bera Test
+
+data:  foo
+X-squared = 3.6006, df = 2, p-value = 0.1653
+
+> 
+> for (i in 1:5) {
++     cat("\nP-values comparing for model", i, ":\n")
++     jb_test <- get(paste0("jb_test", i))
++ 
++     for (j in 1:ncol(jb_test)) {
++         if (jb_test[j, "p-value"] > 0.05) {
++             cat("Lag", jb_test[j, "lags"], "p-value > \u03B1 (0.05) \u27f6 do not reject NULL hypothesis\n")
++         } else {
++             cat("Lag", jb_test[j, "lags"], "has p-value \u2264 \u03B1 (0.05) \u27f6 reject NULL hypothesis.\n")
++         }
++     }
++ }
+
+P-values comparing for model 1 :
+Error in 1:ncol(jb_test) : argument of length 0
+Execution halted

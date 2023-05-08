@@ -2,7 +2,7 @@
 library(Ecdat)
 library(dynlm)
 library(TS)
-
+library(tseries)
 
 # Load dataset IncomeUK (from package Ecdat)
 data(IncomeUK, package = "Ecdat")
@@ -70,7 +70,6 @@ for (i in 1:5) {
     assign(paste0("lb_test", i), lb_test)
 }
 
-lb_test
 
 # Compare p-value with a significance level of 5 percent for our models
 for (i in 1:5) {
@@ -91,3 +90,40 @@ for (i in 1:5) {
 #########################################################
 #                   Jarque-Bera test                    #
 #########################################################
+
+for (i in 1:5) {
+    foo <- (get(paste0("residuals_model_", i)))
+    jb_test <- jarque.bera.test(foo)
+    assign(paste0("jb_test", i), jb_test)
+}
+
+for (i in 1:5) {
+    cat("\n JB-test", i, ":")
+    jb_test <- paste0("jb_test", i)
+    jb_output <- get(jb_test)
+    print(jb_output)
+}
+
+for (i in 1:5) {
+    cat("\nP-values comparing for model", i, ":\n")
+    jb_test <- get(paste0("jb_test", i))
+
+    for (j in 1:ncol(jb_test)) {
+        if (jb_test[j, "p-value"] > 0.05) {
+            cat("Lag", jb_test[j, "lags"], "p-value > \u03B1 (0.05) \u27f6 do not reject NULL hypothesis\n")
+        } else {
+            cat("Lag", jb_test[j, "lags"], "has p-value \u2264 \u03B1 (0.05) \u27f6 reject NULL hypothesis.\n")
+        }
+    }
+}
+
+
+for (i in 1:5) {
+    p_value <- paste0(get(paste0("jb_test", i))$p.value)
+    cat(paste0("\nP-value for model ", i, ": ", p_value, "\n"))
+    if (as.numeric(p_value) < 5) {
+        message("Reject null hypothesis on 5% signficance level.")
+    } else if (as.numeric(p_value) > 5) {
+        message("Do not reject null hypothesis.")
+    }
+}
