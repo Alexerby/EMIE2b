@@ -44,15 +44,12 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 #                                   QUESTION 3                                 #
 ################################################################################
 
+# Create empty list for our residuals
 residuals <- list()
 
-residuals_model1 <- residuals(model1)
-residuals_model2 <- residuals(model2)
-residuals_model3 <- residuals(model3)
-residuals_model4 <- residuals(model4)
-residuals_model5 <- residuals(model5)
-
-# Create empty list
-
+# For loop for storing our residuals in our empty list
+for (i in 1:length(models)) {
+  residuals[[i]] <- residuals(models[[i]])
+}
 
 TS::LjungBox()
