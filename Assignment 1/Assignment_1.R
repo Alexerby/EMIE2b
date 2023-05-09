@@ -2,16 +2,14 @@
 library(Ecdat)
 library(dynlm)
 library(TS)
-library(tseries)
+library(tseries) # used for jarque.bera.test
 
 # Load dataset IncomeUK (from package Ecdat)
 data(IncomeUK, package = "Ecdat")
 
+# Separator
 
-# Function definitions
 
-# Function for comparing p-values to a significance level
-# will be used for the Ljung-Box and Jarque-Bera tests
 
 ################################################################################
 #                                   QUESTION 1                                 #
@@ -20,6 +18,7 @@ data(IncomeUK, package = "Ecdat")
 # Initialize empty list for the models
 model_list <- list()
 
+# Creating models and assigning them to variables
 for (i in 1:5) {
     # Fit the model with the current lag value
     model <- dynlm(income ~ L(income, 1:i), data = IncomeUK)
@@ -32,10 +31,12 @@ for (i in 1:5) {
     assign(paste0("model_", i), model_list[[i]])
 }
 
+message(paste(rep("- ", 35), collapse = ""))
 for (i in 1:length(model_list)) {
     cat("Summary of model", i)
     model <- get(paste0("model_", i))
     print(summary(model))
+    message(paste(rep("- ", 35), collapse = ""))
 }
 
 ################################################################################
@@ -63,7 +64,6 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 #                   Ljung-Box test                      #
 #########################################################
 
-
 # For loop for our models
 for (i in 1:length(model_list)) {
     # Create variables for each models residuals
@@ -87,4 +87,22 @@ for (i in 1:length(model_list)) {
             message("")
         }
     }
+}
+
+#########################################################
+#                 Jarque-Bera test                      #
+#########################################################
+
+for (i in 1:length(model_list)) {
+    residuals <- residuals(model_list[[i]])
+    output <- jarque.bera.test(residuals)
+    p_value <- output$p.value
+    cat("Jarque-Bera p-value for model", i, "is ", p_value, "\n")
+
+    if (p_value < 0.05) {
+        message("Reject NULL hypothesis at 5% significance level")
+    } else {
+        message("Do not reject NULL hypothesis at 5% significance level")
+    }
+    message("\n")
 }
