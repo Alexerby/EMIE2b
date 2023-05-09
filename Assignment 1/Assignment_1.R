@@ -34,7 +34,8 @@ for (i in 1:5) {
 
 for (i in 1:length(model_list)) {
     cat("Summary of model", i)
-    print(summary(get(paste0("model_", i))))
+    model <- get(paste0("model_", i))
+    print(summary(model))
 }
 
 ################################################################################
@@ -69,10 +70,11 @@ for (i in 1:length(model_list)) {
     residuals_model <- paste0("residuals_model_", i) # residuals_model_i
     residuals <- residuals(model_list[[i]]) # store residuals in variable
     assign(residuals_model, residuals) # assign name for each
-    output <- TS::LjungBox(get(residuals_model), lags = c(1:i)) # save output of test
-    cat("\n\nModel", i, ":\n")
+    residuals <- get(residuals_model)
+    output <- TS::LjungBox(residuals, lags = c(1:i)) # save output of test
+    cat("\nModel", i, ":\n")
 
-    # An inner for loop for printing P-values
+    # An inner for loop for printing P-values for each model
     for (rows_index in 1:nrow(output)) {
         p_value <- output[rows_index, "p-value"]
         cat("P-value of lag", rows_index, "is", round(p_value, 3))
@@ -80,7 +82,7 @@ for (i in 1:length(model_list)) {
         # Checking if we want to reject H0 or not and
         # printing the output
         if (p_value < 0.05) {
-            message(" (reject H0 at 5% significance level)")
+            message("    (reject H0 at 5% significance level)")
         } else {
             message("")
         }
