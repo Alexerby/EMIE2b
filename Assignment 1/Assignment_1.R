@@ -8,6 +8,27 @@ library(scales)
 # Load dataset IncomeUK (from package Ecdat)
 data(IncomeUK, package = "Ecdat")
 
+
+# Function definitions
+
+# Function for comparing p-values to a significance level
+# will be used for the Ljung-Box and Jarque-Bera tests
+p_value_comparison <- function(test_stat) {
+
+    for (i in 1:5) {
+        cat("\nP-values comparing for model", i, ":\n")
+        test_stat <- get(paste0("lb_test", i))
+
+        for (j in 1:ncol(test_stat)) {
+            if (test_stat[j, "p-value"] > 0.05) {
+                cat("Lag", test_stat[j, "lags"], "p-value > \u03B1 (0.05) \u27f6 do not reject NULL hypothesis\n")
+            } else {
+                cat("Lag", test_stat[j, "lags"], "has p-value \u2264 \u03B1 (0.05) \u27f6 reject NULL hypothesis.\n")
+            }
+        }
+    }
+}
+
 ################################################################################
 #                                   QUESTION 1                                 #
 ################################################################################
@@ -26,6 +47,13 @@ for (i in 1:5) {
     # with a name that follows the pattern "model_i"
     assign(paste0("model_", i), model_list[[i]])
 }
+
+for (i in 1:length(model_list)) {
+    cat("Summary of model", i)
+    print(summary(get(paste0("model_", i))))
+}
+
+
 
 ################################################################################
 #                                   QUESTION 2                                 #
@@ -47,8 +75,6 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 ################################################################################
 #                                   QUESTION 3                                 #
 ################################################################################
-
-
 
 #########################################################
 #                   Ljung-Box test                      #
@@ -72,19 +98,11 @@ for (i in 1:5) {
 }
 
 
-# Compare p-value with a significance level of 5 percent for our models
-for (i in 1:5) {
-    cat("\nP-values comparing for model", i, ":\n")
-    lb_test <- get(paste0("lb_test", i))
 
-    for (j in 1:ncol(lb_test)) {
-        if (lb_test[j, "p-value"] > 0.05) {
-            cat("Lag", lb_test[j, "lags"], "p-value > \u03B1 (0.05) \u27f6 do not reject NULL hypothesis\n")
-        } else {
-            cat("Lag", lb_test[j, "lags"], "has p-value \u2264 \u03B1 (0.05) \u27f6 reject NULL hypothesis.\n")
-        }
-    }
-}
+# Compare p-value with a significance level of 5 percent for our models
+p_value_comparison(lb_test)
+
+
 # We can see from the output of the above that we can not reject
 # H_0 when it comes to income_{t-5}
 
@@ -107,21 +125,12 @@ for (i in 1:5) {
     print(jb_output)
 }
 
+# Compare p-values from the jb_test
+p_value_comparison(jb_test)
 
-for (i in 1:5) {
-    cat("\nP-values comparing for model", i, ":\n")
-    lb_test <- get(paste0("lb_test", i))
-
-    for (j in 1:ncol(lb_test)) {
-        if (lb_test[j, "p-value"] > 0.05) {
-            cat("Lag", lb_test[j, "lags"], "p-value > \u03B1 (0.05) \u27f6 do not reject NULL hypothesis\n")
-        } else {
-            cat("Lag", lb_test[j, "lags"], "has p-value \u2264 \u03B1 (0.05) \u27f6 reject NULL hypothesis.\n")
-        }
-    }
-}
-
+# Choose significance level
 significance_level <- 0.05
+
 
 for (i in 1:5) {
     p_value <- paste0(get(paste0("jb_test", i))$p.value)
