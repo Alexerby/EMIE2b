@@ -31,7 +31,6 @@ for (i in 1:5) {
     assign(paste0("model_", i), model_list[[i]])
 }
 
-message(paste(rep("- ", 35), collapse = ""))
 for (i in 1:length(model_list)) {
     cat("Summary of model", i)
     model <- get(paste0("model_", i))
