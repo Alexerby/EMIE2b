@@ -73,7 +73,7 @@ for (i in 1:length(model_list)) {
         # Checking if we want to reject H0 or not and
         # printing the output
         if (p_value < 0.05) {
-            message("    (reject H0 at 5% significance level)")
+            message("    (reject NULL hypothesis at 5% significance level)")
         } else {
             message("")
         }
