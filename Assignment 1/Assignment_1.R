@@ -88,12 +88,12 @@ for (i in 1:length(model_list)) {
     residuals <- residuals(model_list[[i]])
     output <- jarque.bera.test(residuals)
     p_value <- output$p.value
-    cat("Jarque-Bera p-value for model", i, "is ", p_value, "\n")
+    cat("Jarque-Bera p-value for model", i, "is", p_value, "\n")
 
     if (p_value < 0.05) {
-        message("Reject NULL hypothesis at 5% significance level")
+        message("(Reject NULL hypothesis at 5% significance level)")
     } else {
-        message("Do not reject NULL hypothesis at 5% significance level")
+        message("(Do not reject NULL hypothesis at 5% significance level)")
     }
     message("\n")
 }
