@@ -7,12 +7,8 @@ library(tseries) # used for jarque.bera.test
 # Load dataset IncomeUK (from package Ecdat)
 data(IncomeUK, package = "Ecdat")
 
-# Separator
-
-
-
 ################################################################################
-#                                   QUESTION 1                                 #
+#                          QUESTION 1: Autoregresive models                    #
 ################################################################################
 
 # Initialize empty list for the models
@@ -39,16 +35,12 @@ for (i in 1:length(model_list)) {
 }
 
 ################################################################################
-#                                   QUESTION 2                                 #
+#                    QUESTION 2: Akaikes information criteria                  #
 ################################################################################
 
 # Calculating the AIC for the different models
 aic_values <- c(
-    AIC(model_1),
-    AIC(model_2),
-    AIC(model_3),
-    AIC(model_4),
-    AIC(model_5)
+    AIC(model_1), AIC(model_2), AIC(model_3), AIC(model_4), AIC(model_5)
 )
 
 # Determine the minimum value of the models
@@ -56,11 +48,11 @@ best_model_aic <- which.min(aic_values)
 cat("Best model based on AIC: ", best_model_aic, "\n")
 
 ################################################################################
-#                                   QUESTION 3                                 #
+#                   QUESTION 3: Ljung-Box & Jarque-Bera tests                  #
 ################################################################################
 
 #########################################################
-#                   Ljung-Box test                      #
+#                 3a) Ljung-Box test                    #
 #########################################################
 
 # For loop for our models
@@ -89,7 +81,7 @@ for (i in 1:length(model_list)) {
 }
 
 #########################################################
-#                 Jarque-Bera test                      #
+#               3b) Jarque-Bera test                    #
 #########################################################
 
 for (i in 1:length(model_list)) {
