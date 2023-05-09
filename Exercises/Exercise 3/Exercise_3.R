@@ -39,6 +39,7 @@ plot(residuals(result1))
 
 # How many lags to use?
 nlags <- floor(0.75 * nobs(result1)^(1/3))
+nobs(result1)
 
 m <- length(coef(result1))
 
@@ -87,3 +88,5 @@ coeftest(model1, vcov = HAC)
 
 
 data <- pxweb_interactive()
+
+nlags

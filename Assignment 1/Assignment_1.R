@@ -63,18 +63,26 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 #########################################################
 
 
-
+# For loop for our models
 for (i in 1:length(model_list)) {
-
     # Create variables for each models residuals
-    residuals_model <- paste0("residuals_model_", i)
-    residuals <- residuals(model_list[[i]])
-    assign(residuals_model, residuals)
+    residuals_model <- paste0("residuals_model_", i) # residuals_model_i
+    residuals <- residuals(model_list[[i]]) # store residuals in variable
+    assign(residuals_model, residuals) # assign name for each
+    output <- TS::LjungBox(get(residuals_model), lags = c(1:i)) # save output of test
+    cat("\n\nModel", i, ":\n")
 
-    # Perform Ljung-Box test on residuals
-    cat("\n Ljung-Box output for model", i, ":\n")
-    print(TS::LjungBox(get(residuals_model), lags = c(1:i)))
+    # An inner for loop for printing P-values
+    for (rows_index in 1:nrow(output)) {
+        p_value <- output[rows_index, "p-value"]
+        cat("P-value of lag", rows_index, "is", round(p_value, 3))
+
+        # Checking if we want to reject H0 or not and
+        # printing the output
+        if (p_value < 0.05) {
+            message(" (reject H0 at 5% significance level)")
+        } else {
+            message("")
+        }
+    }
 }
-
-# lags = nlags not specified yet 
-# nlags <- floor(0.75 * nobs(residuals)^(1/3))
