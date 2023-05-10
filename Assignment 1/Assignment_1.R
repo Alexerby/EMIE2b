@@ -7,6 +7,7 @@ library(tseries) # used for jarque.bera.test
 # Load dataset IncomeUK (from package Ecdat)
 data(IncomeUK, package = "Ecdat")
 
+
 ################################################################################
 #                          QUESTION 1: Autoregresive models                    #
 ################################################################################
@@ -15,21 +16,21 @@ data(IncomeUK, package = "Ecdat")
 model_list <- list()
 
 # Creating models and assigning them to variables
-for (i in 1:5) {
+for (lag in 1:5) {
     # Fit the model with the current lag value
-    model <- dynlm(income ~ L(income, 1:i), data = IncomeUK)
+    model <- dynlm(income ~ L(income, 1:lag), data = IncomeUK)
 
     # Add the model object to the list
-    model_list[[i]] <- model
+    model_list[[lag]] <- model
 
     # Assign the model object to a variable
     # with a name that follows the pattern "model_i"
-    assign(paste0("model_", i), model_list[[i]])
+    assign(paste0("model_", lag), model_list[[lag]])
 }
 
 for (i in 1:length(model_list)) {
-    cat("Summary of model", i)
-    model <- get(paste0("model_", i))
+    cat("Summary of model", lag)
+    model <- get(paste0("model_", lag))
     print(summary(model))
     message(paste(rep("- ", 35), collapse = ""))
 }
