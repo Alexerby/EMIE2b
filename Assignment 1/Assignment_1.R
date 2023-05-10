@@ -57,26 +57,28 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 
 # For loop for our models
 for (i in 1:length(model_list)) {
-    residuals_model <- paste0("residuals_model_", i) # creates variables for residuals: "residuals_model_i"
-    residuals <- residuals(model_list[[i]]) # store residuals in local variable called "residuals"
-    assign(residuals_model, residuals) # assign name for each
-    residuals <- get(residuals_model)
-    output <- TS::LjungBox(residuals, lags = c(1:i)) # save output of test
-    cat("\nModel", i, ":\n")
-
-    # An inner for loop for printing P-values for each model
-    for (rows_index in 1:nrow(output)) {
-        p_value <- output[rows_index, "p-value"]
-        cat("P-value of lag", rows_index, "is", round(p_value, 3))
-
-        # Checking if we want to reject H0 or not and
-        # printing the output
-        if (p_value < 0.05) {
-            message("    (reject NULL hypothesis at 5% significance level)")
-        } else {
-            message("")
-        }
+  # Create variables for each models residuals
+  residuals_model <- paste0("residuals_model_", i) # residuals_model_i
+  residuals <- residuals(model_list[[i]]) # store residuals in variable
+  assign(residuals_model, residuals) # assign name for each
+  residuals <- get(residuals_model)
+  output <- TS::LjungBox(residuals, lags = c(1:10), order = 2) # save output of test
+  cat("\nModel", i, ":\n")
+  
+  # Print p-value fo each row
+  for (rows_index in 1:nrow(output)) {
+    p_value <- output[rows_index, "p-value"]
+    if (!is.na(p_value)) {
+      cat("P-value of lag", rows_index, "is", round(p_value, 3))
+      # Checking if we want to reject H0 or not and
+      # printing the output
+      if (p_value < 0.05) {
+        message("    (reject NULL hypothesis at 5% significance level)")
+      } else {
+        message("")
+      }
     }
+  }
 }
 
 #########################################################
@@ -112,3 +114,14 @@ for (i in 1:length(model_list)) {
 # mean that the residuals isn’t normally distributed. Model 5 passes both the 
 # test, and hence supports the results from the AIC test. This is considering
 # a significance level of 5%.
+
+# The best model according to the AIC test is model 5, and when comparing this to 
+# the results obtained from running the LjungBox and Jarque-Bera tests, this seems
+# to be the case. When running the LjungBox and Jarque-Bera tests on the models, 
+# we do not want it to reject the null hypothesis. For the LjungBox test, 
+# we don’t want to reject the null because if it is rejected, 
+# that means there is autocorrelation in the residuals. For the Jarque-Bera we 
+# don’t want it to reject the null because this would mean that the residuals 
+# isn’t normally distributed. As we can see in our output, Model 5 passes the test 
+# best, and hence supports the results from the AIC. This is considering a 
+# significance level of 5%.
