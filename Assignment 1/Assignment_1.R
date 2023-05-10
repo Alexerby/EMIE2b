@@ -57,9 +57,8 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 
 # For loop for our models
 for (i in 1:length(model_list)) {
-    # Create variables for each models residuals
-    residuals_model <- paste0("residuals_model_", i) # residuals_model_i
-    residuals <- residuals(model_list[[i]]) # store residuals in variable
+    residuals_model <- paste0("residuals_model_", i) # creates variables for residuals: "residuals_model_i"
+    residuals <- residuals(model_list[[i]]) # store residuals in local variable called "residuals"
     assign(residuals_model, residuals) # assign name for each
     residuals <- get(residuals_model)
     output <- TS::LjungBox(residuals, lags = c(1:i)) # save output of test
@@ -97,3 +96,19 @@ for (i in 1:length(model_list)) {
     }
     message("\n")
 }
+
+
+################################################################################
+#                          Results from Assignment 1                           #
+################################################################################
+
+# The best model according to the AIC test is model 5. If we compare 
+# this to the results obtained from running the LjungBox and Jarque-Bera 
+# tests, we can see that this might be the case. When running the LjungBox 
+# and Jarque-Bera tests on the models, we do not want it to reject the null 
+# hypothesis. For the LjungBox test, we don’t want to reject the null because 
+# if it is rejected, that means there is autocorrelation in the residuals. 
+# For the Jarque-Bera we don’t want it to reject the null because this would 
+# mean that the residuals isn’t normally distributed. Model 5 passes both the 
+# test, and hence supports the results from the AIC test. This is considering
+# a significance level of 5%.
