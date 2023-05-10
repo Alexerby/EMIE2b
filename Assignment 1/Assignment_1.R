@@ -63,7 +63,8 @@ for (i in 1:length(model_list)) {
   residuals <- residuals(model_list[[i]]) # store residuals in variable
   assign(residuals_model, residuals) # assign name for each
   residuals <- get(residuals_model)
-  output <- TS::LjungBox(residuals, lags = c(1:10), order = 2) # save output of test
+  parameters <- (i+1)
+  output <- TS::LjungBox(residuals, lags = c(1:10), order = parameters) # save output of test
   cat("\nModel", i, ":\n")
   
   # Print p-value fo each row
