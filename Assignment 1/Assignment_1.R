@@ -70,8 +70,7 @@ for (i in 1:length(model_list)) {
     p_value <- output[rows_index, "p-value"]
     if (!is.na(p_value)) {
       cat("P-value of lag", rows_index, "is", round(p_value, 3))
-      # Checking if we want to reject H0 or not and
-      # printing the output
+
       if (p_value < 0.05) {
         message("    (reject NULL hypothesis at 5% significance level)")
       } else {
@@ -103,17 +102,6 @@ for (i in 1:length(model_list)) {
 ################################################################################
 #                          Results from Assignment 1                           #
 ################################################################################
-
-# The best model according to the AIC test is model 5. If we compare 
-# this to the results obtained from running the LjungBox and Jarque-Bera 
-# tests, we can see that this might be the case. When running the LjungBox 
-# and Jarque-Bera tests on the models, we do not want it to reject the null 
-# hypothesis. For the LjungBox test, we don’t want to reject the null because 
-# if it is rejected, that means there is autocorrelation in the residuals. 
-# For the Jarque-Bera we don’t want it to reject the null because this would 
-# mean that the residuals isn’t normally distributed. Model 5 passes both the 
-# test, and hence supports the results from the AIC test. This is considering
-# a significance level of 5%.
 
 # The best model according to the AIC test is model 5, and when comparing this to 
 # the results obtained from running the LjungBox and Jarque-Bera tests, this seems
