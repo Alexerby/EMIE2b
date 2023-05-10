@@ -101,7 +101,7 @@ for (i in 1:length(model_list)) {
 
 
 ################################################################################
-#                          Results from Assignment 1                           #
+#                      Summary of results from Assignment 1                    #
 ################################################################################
 
 # The best model according to the AIC test is model 5, and when comparing this to 
@@ -111,6 +111,6 @@ for (i in 1:length(model_list)) {
 # we don’t want to reject the null because if it is rejected, 
 # that means there is autocorrelation in the residuals. For the Jarque-Bera we 
 # don’t want it to reject the null because this would mean that the residuals 
-# isn’t normally distributed. As we can see in our output, Model 5 passes the test 
-# best, and hence supports the results from the AIC. This is considering a 
-# significance level of 5%.
+# isn’t normally distributed. As we can see in our output, Model 5 passes the tests 
+# best (especially the LjungBox), and hence supports the results from the AIC. 
+# This is considering a significance level of 5%.
