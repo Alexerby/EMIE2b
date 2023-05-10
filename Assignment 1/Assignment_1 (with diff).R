@@ -18,7 +18,7 @@ model_list <- list()
 # Creating models and assigning them to variables
 for (lag in 1:5) {
     # Fit the model with the current lag value
-    model <- dynlm(income ~ L(income, 1:lag), data = IncomeUK)
+    model <- dynlm(d(income) ~ L(d(income), 1:lag), data = IncomeUK)
 
     # Add the model object to the list
     model_list[[lag]] <- model
