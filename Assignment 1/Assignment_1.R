@@ -29,8 +29,8 @@ for (lag in 1:5) {
 }
 
 for (i in 1:length(model_list)) {
-    cat("Summary of model", lag)
-    model <- get(paste0("model_", lag))
+    cat("Summary of model", i)
+    model <- get(paste0("model_", i))
     print(summary(model))
     message(paste(rep("- ", 35), collapse = ""))
 }

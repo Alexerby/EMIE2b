@@ -1,0 +1,371 @@
+
+R version 4.3.0 (2023-04-21) -- "Already Tomorrow"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Load required libraries
+> library(Ecdat)
+Loading required package: Ecfun
+
+Attaching package: ‘Ecfun’
+
+The following object is masked from ‘package:base’:
+
+    sign
+
+
+Attaching package: ‘Ecdat’
+
+The following object is masked from ‘package:datasets’:
+
+    Orange
+
+> library(dynlm)
+Loading required package: zoo
+
+Attaching package: ‘zoo’
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+> library(TS)
+Loading required package: urca
+Loading required package: vars
+Loading required package: MASS
+
+Attaching package: ‘MASS’
+
+The following object is masked from ‘package:Ecdat’:
+
+    SP500
+
+Loading required package: strucchange
+Loading required package: sandwich
+Loading required package: lmtest
+Loading required package: tseries
+Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+> library(tseries) # used for jarque.bera.test
+> 
+> # Load dataset IncomeUK (from package Ecdat)
+> data(IncomeUK, package = "Ecdat")
+> 
+> 
+> ################################################################################
+> #                          QUESTION 1: Autoregresive models                    #
+> ################################################################################
+> 
+> # Initialize empty list for the models
+> model_list <- list()
+> 
+> # Creating models and assigning them to variables
+> for (lag in 1:5) {
++     # Fit the model with the current lag value
++     model <- dynlm(d(income) ~ L(d(income), 1:lag), data = IncomeUK)
++ 
++     # Add the model object to the list
++     model_list[[lag]] <- model
++ 
++     # Assign the model object to a variable
++     # with a name that follows the pattern "model_i"
++     assign(paste0("model_", lag), model_list[[lag]])
++ }
+> 
+> for (i in 1:length(model_list)) {
++     cat("Summary of model", i)
++     model <- get(paste0("model_", i))
++     print(summary(model))
++     message(paste(rep("- ", 35), collapse = ""))
++ }
+Summary of model 1
+Time series regression with "ts" data:
+Start = 1971(3), End = 1985(2)
+
+Call:
+dynlm(formula = d(income) ~ L(d(income), 1:lag), data = IncomeUK)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1332.5  -496.1  -107.0   333.1  2411.0 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)         1124.4456   157.7921   7.126 2.57e-09 ***
+L(d(income), 1:lag)   -0.2691     0.1425  -1.888   0.0644 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 753.9 on 54 degrees of freedom
+Multiple R-squared:  0.06191,	Adjusted R-squared:  0.04453 
+F-statistic: 3.564 on 1 and 54 DF,  p-value: 0.06444
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+Summary of model 2
+Time series regression with "ts" data:
+Start = 1971(4), End = 1985(2)
+
+Call:
+dynlm(formula = d(income) ~ L(d(income), 1:lag), data = IncomeUK)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1254.01  -504.29   -84.24   381.52  1826.59 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          752.3922   207.6010   3.624 0.000659 ***
+L(d(income), 1:lag)1  -0.2221     0.1361  -1.633 0.108569    
+L(d(income), 1:lag)2   0.3915     0.1438   2.723 0.008790 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 711.8 on 52 degrees of freedom
+Multiple R-squared:  0.1821,	Adjusted R-squared:  0.1506 
+F-statistic: 5.789 on 2 and 52 DF,  p-value: 0.005372
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+Summary of model 3
+Time series regression with "ts" data:
+Start = 1972(1), End = 1985(2)
+
+Call:
+dynlm(formula = d(income) ~ L(d(income), 1:lag), data = IncomeUK)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1166.8  -534.5  -121.6   347.0  1763.5 
+
+Coefficients:
+                      Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          841.57183  235.23178   3.578 0.000781 ***
+L(d(income), 1:lag)1  -0.20903    0.14498  -1.442 0.155593    
+L(d(income), 1:lag)2   0.38439    0.14569   2.638 0.011075 *  
+L(d(income), 1:lag)3  -0.09951    0.15810  -0.629 0.531974    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 719.5 on 50 degrees of freedom
+Multiple R-squared:  0.1914,	Adjusted R-squared:  0.1429 
+F-statistic: 3.946 on 3 and 50 DF,  p-value: 0.01329
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+Summary of model 4
+Time series regression with "ts" data:
+Start = 1972(2), End = 1985(2)
+
+Call:
+dynlm(formula = d(income) ~ L(d(income), 1:lag), data = IncomeUK)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1644.4  -366.6  -170.4   422.0  1801.2 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          530.5438   233.0239   2.277  0.02730 *  
+L(d(income), 1:lag)1  -0.1806     0.1290  -1.400  0.16795    
+L(d(income), 1:lag)2   0.2255     0.1348   1.673  0.10079    
+L(d(income), 1:lag)3  -0.1176     0.1397  -0.842  0.40411    
+L(d(income), 1:lag)4   0.5323     0.1401   3.799  0.00041 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 635.2 on 48 degrees of freedom
+Multiple R-squared:  0.376,	Adjusted R-squared:  0.324 
+F-statistic: 7.232 on 4 and 48 DF,  p-value: 0.0001216
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+Summary of model 5
+Time series regression with "ts" data:
+Start = 1972(3), End = 1985(2)
+
+Call:
+dynlm(formula = d(income) ~ L(d(income), 1:lag), data = IncomeUK)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1739.8  -366.1  -197.2   478.3  1814.3 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          490.9581   249.5951   1.967 0.055230 .  
+L(d(income), 1:lag)1  -0.2289     0.1504  -1.522 0.134898    
+L(d(income), 1:lag)2   0.2248     0.1378   1.632 0.109605    
+L(d(income), 1:lag)3  -0.1272     0.1433  -0.887 0.379556    
+L(d(income), 1:lag)4   0.5246     0.1429   3.670 0.000629 ***
+L(d(income), 1:lag)5   0.1155     0.1624   0.711 0.480438    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 645.3 on 46 degrees of freedom
+Multiple R-squared:  0.3828,	Adjusted R-squared:  0.3157 
+F-statistic: 5.705 on 5 and 46 DF,  p-value: 0.0003556
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+> 
+> ################################################################################
+> #                    QUESTION 2: Akaikes information criteria                  #
+> ################################################################################
+> 
+> # Calculating the AIC for the different models
+> aic_values <- c(
++     AIC(model_1), AIC(model_2), AIC(model_3), AIC(model_4), AIC(model_5)
++ )
+> 
+> # Determine the minimum value of the models
+> best_model_aic <- which.min(aic_values)
+> cat("Best model based on AIC: ", best_model_aic, "\n")
+Best model based on AIC:  5 
+> 
+> ################################################################################
+> #                   QUESTION 3: Ljung-Box & Jarque-Bera tests                  #
+> ################################################################################
+> 
+> #########################################################
+> #                 3a) Ljung-Box test                    #
+> #########################################################
+> 
+> # For loop for our models
+> for (i in 1:length(model_list)) {
++     # Create variables for each models residuals
++     residuals_model <- paste0("residuals_model_", i) # residuals_model_i
++     residuals <- residuals(model_list[[i]]) # store residuals in variable
++     assign(residuals_model, residuals) # assign name for each
++     residuals <- get(residuals_model)
++     parameters <- (i + 1)
++     output <- TS::LjungBox(residuals, lags = c(1:10), order = parameters) # save output of test
++     cat("\nModel", i, ":\n")
++ 
++     # Print p-value fo each row
++     for (rows_index in 1:nrow(output)) {
++         p_value <- output[rows_index, "p-value"]
++         if (!is.na(p_value)) {
++             cat("P-value of lag", rows_index, "is", round(p_value, 3))
++ 
++             if (p_value < 0.05) {
++                 message("    (reject NULL hypothesis at 5% significance level)")
++             } else {
++                 message("")
++             }
++         }
++     }
++ }
+
+Model 1 :
+P-value of lag 2 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 3 is 0.02    (reject NULL hypothesis at 5% significance level)
+P-value of lag 4 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 5 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 6 is 0.001    (reject NULL hypothesis at 5% significance level)
+P-value of lag 7 is 0.003    (reject NULL hypothesis at 5% significance level)
+P-value of lag 8 is 0.002    (reject NULL hypothesis at 5% significance level)
+P-value of lag 9 is 0.003    (reject NULL hypothesis at 5% significance level)
+P-value of lag 10 is 0.003    (reject NULL hypothesis at 5% significance level)
+
+Model 2 :
+P-value of lag 3 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 4 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 5 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 6 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 7 is 0.001    (reject NULL hypothesis at 5% significance level)
+P-value of lag 8 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 9 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 10 is 0    (reject NULL hypothesis at 5% significance level)
+
+Model 3 :
+P-value of lag 4 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 5 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 6 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 7 is 0.001    (reject NULL hypothesis at 5% significance level)
+P-value of lag 8 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 9 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 10 is 0    (reject NULL hypothesis at 5% significance level)
+
+Model 4 :
+P-value of lag 5 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 6 is 0.262
+P-value of lag 7 is 0.273
+P-value of lag 8 is 0.397
+P-value of lag 9 is 0.557
+P-value of lag 10 is 0.299
+
+Model 5 :
+P-value of lag 6 is 0    (reject NULL hypothesis at 5% significance level)
+P-value of lag 7 is 0.097
+P-value of lag 8 is 0.212
+P-value of lag 9 is 0.376
+P-value of lag 10 is 0.194
+> 
+> #########################################################
+> #               3b) Jarque-Bera test                    #
+> #########################################################
+> 
+> for (i in 1:length(model_list)) {
++     residuals <- residuals(model_list[[i]])
++     output <- jarque.bera.test(residuals)
++     p_value <- output$p.value
++     cat("Jarque-Bera p-value for model", i, "is", p_value, "\n")
++ 
++     if (p_value < 0.05) {
++         message("(Reject NULL hypothesis at 5% significance level)")
++     } else {
++         message("(Do not reject NULL hypothesis at 5% significance level)")
++     }
++     message("\n")
++ }
+Jarque-Bera p-value for model 1 is 0.01094696 
+(Reject NULL hypothesis at 5% significance level)
+
+
+Jarque-Bera p-value for model 2 is 0.2093845 
+(Do not reject NULL hypothesis at 5% significance level)
+
+
+Jarque-Bera p-value for model 3 is 0.1517088 
+(Do not reject NULL hypothesis at 5% significance level)
+
+
+Jarque-Bera p-value for model 4 is 0.2341484 
+(Do not reject NULL hypothesis at 5% significance level)
+
+
+Jarque-Bera p-value for model 5 is 0.2141437 
+(Do not reject NULL hypothesis at 5% significance level)
+
+
+> 
+> 
+> ################################################################################
+> #                      Summary of results from Assignment 1                    #
+> ################################################################################
+> 
+> # The best model according to the AIC test is model 5, and when comparing this to
+> # the results obtained from running the LjungBox and Jarque-Bera tests, this seems
+> # to be the case. When running the LjungBox and Jarque-Bera tests on the models,
+> # we do not want it to reject the null hypothesis. For the LjungBox test,
+> # we don’t want to reject the null because if it is rejected,
+> # that means there is autocorrelation in the residuals. For the Jarque-Bera we
+> # don’t want it to reject the null because this would mean that the residuals
+> # isn’t normally distributed. As we can see in our output, Model 5 passes the tests
+> # best (especially the LjungBox), and hence supports the results from the AIC.
+> # This is considering a significance level of 5%.
+> 
+> proc.time()
+   user  system elapsed 
+  0.954   0.085   1.085 
