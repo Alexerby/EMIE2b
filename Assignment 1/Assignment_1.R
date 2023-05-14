@@ -12,6 +12,8 @@ income <- IncomeUK[, "income"] # Rename the variable to avoid conflict
 #                          QUESTION 1: Autoregressive models                    #
 ################################################################################
 
+model_list <- list()
+
 # Create lags
 lags <- embed(income, 5)
 lags <- lags[1:(length(income) - 5), ] # Keep only the relevant rows
@@ -29,6 +31,7 @@ for (lag in 1:5) {
 
     # Add the model object to the list
     model_list[[lag]] <- model
+    assign(paste0("model_", lag), model_list[[lag]])
 }
 
 for (lag in 1:5) {
@@ -43,7 +46,7 @@ for (lag in 1:5) {
 
 # Calculating the AIC for the different models
 aic_values <- c(
-    AIC(model1), AIC(model2), AIC(model3), AIC(model4), AIC(model5)
+    AIC(model_1), AIC(model_2), AIC(model_3), AIC(model_4), AIC(model_5)
 )
 
 # Determine the minimum value of the models
