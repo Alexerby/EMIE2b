@@ -71,6 +71,8 @@ Registered S3 method overwritten by 'quantmod':
 > #                          QUESTION 1: Autoregressive models                    #
 > ################################################################################
 > 
+> model_list <- list()
+> 
 > # Create lags
 > lags <- embed(income, 5)
 > lags <- lags[1:(length(income) - 5), ] # Keep only the relevant rows
@@ -88,6 +90,79 @@ Registered S3 method overwritten by 'quantmod':
 + 
 +     # Add the model object to the list
 +     model_list[[lag]] <- model
++     assign(paste0("model_", lag), model_list[[lag]])
 + }
-Error: object 'model_list' not found
+> 
+> for (lag in 1:5) {
++     print(model_list[[lag]])
++     message(paste(rep("- ", 35), collapse = ""))
++ }
+
+Call:
+lm(formula = formula, data = IncomeUK)
+
+Coefficients:
+(Intercept)        lag_1  
+    591.638        1.011  
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+Call:
+lm(formula = formula, data = IncomeUK)
+
+Coefficients:
+(Intercept)        lag_1        lag_2  
+   797.1529       0.6429       0.3718  
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+Call:
+lm(formula = formula, data = IncomeUK)
+
+Coefficients:
+(Intercept)        lag_1        lag_2        lag_3  
+   637.1515       0.7018       0.5871      -0.2789  
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+Call:
+lm(formula = formula, data = IncomeUK)
+
+Coefficients:
+(Intercept)        lag_1        lag_2        lag_3        lag_4  
+   706.2236       0.7378       0.5349      -0.4364       0.1759  
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+Call:
+lm(formula = formula, data = IncomeUK)
+
+Coefficients:
+(Intercept)        lag_1        lag_2        lag_3        lag_4        lag_5  
+   474.1020       0.8012       0.3974      -0.3398       0.6467      -0.5004  
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+> 
+> 
+> ################################################################################
+> #                    QUESTION 2: Akaikes information criteria                  #
+> ################################################################################
+> 
+> # Calculating the AIC for the different models
+> aic_values <- c(
++     AIC(model_1), AIC(model_2), AIC(model_3), AIC(model_4), AIC(model_5)
++ )
+> 
+> # Determine the minimum value of the models
+> best_model_aic <- which.min(aic_values)
+> cat("Best model based on AIC: ", best_model_aic, "\n")
+Best model based on AIC:  5 
+> 
+> ################################################################################
+> #                   QUESTION 3: Ljung-Box & Jarque-Bera tests                  #
+> ################################################################################
+> 
+> # Define the model list
+> model_list <- list(model1, model2, model3, model4, model5)
+Error: object 'model1' not found
 Execution halted

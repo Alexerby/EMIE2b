@@ -58,7 +58,7 @@ cat("Best model based on AIC: ", best_model_aic, "\n")
 ################################################################################
 
 # Define the model list
-model_list <- list(model1, model2, model3, model4, model5)
+model_list <- list(model_1, model_2, model_3, model_4, model_5)
 
 #########################################################
 #                 3a) Ljung-Box test                    #
