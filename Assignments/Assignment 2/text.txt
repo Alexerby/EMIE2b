@@ -1,0 +1,78 @@
+
+R version 4.3.0 (2023-04-21 ucrt) -- "Already Tomorrow"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(lmtest)
+Loading required package: zoo
+
+Attaching package: 'zoo'
+
+The following objects are masked from 'package:base':
+
+    as.Date, as.Date.numeric
+
+> library(tseries)
+Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+> 
+> data(ChickEgg, package = "lmtest")
+> 
+> 
+> 
+> ################################################################################
+> #                   QUESTION 1: Order of integration for ChickEgg              #
+> ################################################################################
+> 
+> # Checking order of integration for chicken variable in dataset ChickEgg
+> 
+> # Choose variable
+> chicken <- ChickEgg[, "chicken"]
+> 
+> # Initialize necessary variables
+> significance_level <- 0.05
+> difference <- 0
+> p_value <- 1
+> 
+> # While the p_value is greater than significance level keep looping
+> while (p_value >= significance_level) {
++     difference <- difference + 1 # increment the difference by 1
++ 
++     # Check difference against dataset to not take a difference greater than the length of the dataset
++     if (difference > length(chicken) - 1) {
++         break
++     }
++     chicken_diff <- diff(chicken, differences = difference) # otherwise take difference of order d
++     adf_test <- adf.test(chicken_diff) # perform adf test
++     p_value <- adf_test$p.value # assign the p_value to variable
++ 
++     if (p_value < significance_level) {
++         break
++     } else {
++         print(paste("ADF test for", difference, "order difference: p-value =", p_value))
++     }
++ }
+[1] "ADF test for 1 order difference: p-value = 0.251812142271126"
+Warning message:
+In adf.test(chicken_diff) : p-value smaller than printed p-value
+> 
+> cat("We need to difference the time series data of variable 'chicken'", difference, "time(s)")
+We need to difference the time series data of variable 'chicken' 2 time(s)> 
+> proc.time()
+   user  system elapsed 
+   0.25    0.10    0.34 
