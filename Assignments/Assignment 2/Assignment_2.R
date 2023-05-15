@@ -1,5 +1,7 @@
 library(lmtest)
 library(tseries)
+library(TS)
+library(urca)
 
 data(ChickEgg, package = "lmtest")
 
@@ -12,10 +14,10 @@ data(ChickEgg, package = "lmtest")
 
 # Define function for checking the required
 # order of integration using the augmented dickey fuller test
-order_of_integration <- function(variable,
-                                 significance_level = 0.05,
-                                 p_value = 1,
-                                 difference = 0) {
+find_integration_order <- function(variable,
+                                   significance_level = 0.05,
+                                   p_value = 1,
+                                   difference = 0) {
     while (p_value >= significance_level) {
         difference <- difference + 1 # increment the difference by 1
 
@@ -33,7 +35,9 @@ order_of_integration <- function(variable,
         if (p_value < significance_level) {
             cat(
                 "The order of integration for variable",
-                substitute(variable), "is", difference,
+                substitute(variable), "at the significance level of",
+                significance_level, "is",
+                difference,
                 "\n\n"
             )
             break
@@ -48,10 +52,39 @@ order_of_integration <- function(variable,
     }
 }
 
+# Define the variables we want to test
 chicken <- ChickEgg[, "chicken"]
 egg <- ChickEgg[, "egg"]
 
-# Checking order of integration for chicken and
-# egg variable using our defined function
-order_of_integration(chicken)
-order_of_integration(egg)
+# Call find_integration_order()
+find_integration_order(chicken)
+find_integration_order(egg)
+
+
+
+
+# However its not necessarily as easy as comparing the
+# p-value to the significance level, we need to consider
+# multiple methods and statistics when deciding on the
+# order of integration. Another important way of
+# making a decision is by comparing the tau-value
+# of the DF-test to the critical value. We will do
+# this by using the modified urca.df() function
+# defined by prof. Michael Lundholm
+
+ADF.test(chicken)
+ADF.test(egg)
+
+# We can see that his function will choose the same lags
+# as our function did, i.e. a lag of 1 for egg and
+# a lag of 2 for chicken. It is also worth considering
+#
+
+significance_level <- 0.05
+
+ur.df(chicken)
+
+ADF.test(chicken)
+
+test_statistic <- ur.df(chicken)@teststat[, "tau1"]
+critical_value <- ur.df(chicken)@cval[, "5pct"]
