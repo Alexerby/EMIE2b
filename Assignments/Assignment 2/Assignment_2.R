@@ -75,10 +75,9 @@ find_integration_order(egg)
 ADF.test(chicken)
 ADF.test(egg)
 
-# We can see that his function will choose the same lags
-# as our function did, i.e. a lag of 1 for egg and
-# a lag of 2 for chicken. It is also worth considering
-#
+# We can see that this function will suggest the same
+# number of  lags as our function did, i.e. a lag of 1 for 
+#egg and a lag of 2 for chicken. It is also worth considering
 
 significance_level <- 0.05
 
