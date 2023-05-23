@@ -1,7 +1,8 @@
 library(pxweb)
 library(httr)
-library(dplyr)
-library(zoo)
+library(TS)
+library(Ecdat)
+library(vars)
 
 ###############################################################################
 #                           DATA GATHERING & PREPARATION                      #
@@ -123,4 +124,99 @@ colnames(main_df)[3] <- "M1_MSEK"
 # Create column for income velocity of money
 main_df$velocity <- main_df$GDP_MSEK / main_df$M1_MSEK
 
+tseries <- ts(main_df, start = c(2012, 1), frequency = 4)
 
+
+
+
+# Perform ADF test for GDP_MSEK (cannot reject unit root)
+ADF.test(main_df$GDP_MSEK)
+foc_gdp <- diff(main_df$GDP_MSEK, diff = 1) # foc of gdp
+ADF.test(foc_gdp) # test again (now can reject unit root)
+
+# Perform ADF test for M1_MSEK (cannot reject unit root)
+ADF.test(main_df$M1_MSEK)
+foc_m1 <- diff(main_df$M1_MSEK, diff = 1) # foc of gdp
+ADF.test(foc_m1)
+
+soc_m1 <- diff(foc_m1)
+ADF.test(soc_m1)
+
+
+
+
+# Create times series of our differenced variables
+# and then combine the time series to one designated
+# object.
+foc_gdp_ts <- ts(foc_gdp)
+soc_m1_ts <- ts(soc_m1)
+combined_ts <- ts.intersect(foc_gdp_ts, soc_m1_ts)
+
+# Plots for M1 and GDP
+par(mfrow = c(2, 1))
+
+plot(
+  tseries[, "M1_MSEK"],
+  ylab = "Money quantity, M1 (MSEK)",
+  xlab = "Years"
+)
+
+plot(
+  tseries[, "GDP_MSEK"],
+  ylab = "GDP (MSEK)",
+  xlab = "Years"
+)
+
+plot(combined_ts)
+
+colnames(combined_ts)[colnames(combined_ts) == "foc_gdp_ts"] <- "GDP"
+colnames(combined_ts)[colnames(combined_ts) == "soc_m1_ts"] <- "M1"
+
+# Use the VARselect command to find the optimal lag order
+var_select <- VARselect(combined_ts, type = "both")
+var_select
+
+# Create object for VAR() output. We choice lag according
+# to AIC from VARSelect(), i.e. p = 10
+var_result <- VAR(combined_ts, p = 10, type = "both")
+
+# Tets for autocorrelation through a multivariate
+# portmanteau test
+serial.test(var_result)
+
+# We reject the null hypothesis of no autocorrelation,
+# which implies that there exists autocorrelation. 
+
+# Can not reject Jarque-Bera test which implies that
+# we have normally distributed data.
+normality.test(var_result)$jb.mul$JB
+
+# "M1 do not cause GDP" --> can be rejected
+# (M1 do cause GDP)
+causality(var_result, cause = "M1")$Granger
+
+# "GDP do not cause M1" --> cannot be rejected
+causality(var_result, cause = "GDP")$Granger
+
+irf_gdp_to_m1 <- irf(var_result,
+              impulse = "GDP",
+              reponse = "M1",
+              n.ahead = 10,
+              boot = TRUE
+              )
+
+irf_m1_to_gdp <- irf(var_result,
+              impulse = "M1",
+              reponse = "GDP",
+              n.ahead = 44
+              )
+
+
+
+plot(irf_gdp_to_m1,
+    xlab = "Time",
+     main = "Response of GDP shock")
+
+plot(irf_m1_to_gdp,
+    xlab = "Time",
+     main = "Response of M1 shock")
