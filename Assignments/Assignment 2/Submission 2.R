@@ -30,7 +30,7 @@ egg <- ChickEgg[, "egg"]
 ADF.test(chicken)
 ADF.test(egg)
 
-ur.df(chicken, lags=1)
+ur.df(chicken, lags = 1)
 
 
 # Since the functions are already defined for us, this makes it very convenient
@@ -79,17 +79,11 @@ ur.df(chicken, lags=1)
 #           are selected, since this function uses the ur.df() function with
 #           the parameter of selectlag = "AIC". If we want to customize this
 #           ourselves, we instead use the underlying function itself.
-#           
 #
 #
 #
 #
-
-
-
-
-
-
+#
 ################################################################################
 #                   QUESTION 2:               #
 ################################################################################

@@ -16,7 +16,7 @@ egg <- ChickEgg[, "egg"]
 
 
 # Create function for extracting values and printing output
-extract_values <- function(variable, diff = 1) {
+adf_test <- function(variable, diff = 1) {
     # Take tau statistic
     adf_output <- ur.df(variable, lag = diff)
 
@@ -35,14 +35,20 @@ extract_values <- function(variable, diff = 1) {
         "of difference",
         diff, "is", tau_value,
         "and critical value of 5% significance level is",
-        cval_5pct, "\n\n"
+        cval_5pct
     )
+
+    if (tau_value < cval_5pct) {
+        cat("\nReject NULL (unit root) at difference of", diff, "\n\n")
+    } else {
+        cat("\nDo not reject NULL (unit root) at difference of", diff, "\n\n")
+    }
 }
 
-extract_values(chicken, diff = 1)
-extract_values(chicken, diff = 2)
-extract_values(chicken, diff = 3)
+adf_test(chicken, diff = 1)
+adf_test(chicken, diff = 2)
+adf_test(chicken, diff = 3)
 
-extract_values(egg, diff = 1)
-extract_values(egg, diff = 2)
-extract_values(egg, diff = 3)
+adf_test(egg, diff = 1)
+adf_test(egg, diff = 2)
+adf_test(egg, diff = 3)

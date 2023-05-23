@@ -7,6 +7,7 @@ library(tseries) # used for jarque.bera.test
 # Load dataset IncomeUK (from package Ecdat)
 data(IncomeUK, package = "Ecdat")
 income <- IncomeUK[, "income"] # Rename the variable to avoid conflict
+income <- diff(income)
 
 ################################################################################
 #                          QUESTION 1: Autoregressive models                    #
@@ -27,7 +28,7 @@ for (lag in 1:5) {
     formula <- as.formula(paste0("income[6:length(income)] ~ ", paste0("lag_", 1:lag, collapse = " + ")))
 
     # Fit the model with the current lag value
-    model <- lm(formula, data = IncomeUK)
+    model <- lm(formula, data = diff(IncomeUK))
 
     # Add the model object to the list
     model_list[[lag]] <- model

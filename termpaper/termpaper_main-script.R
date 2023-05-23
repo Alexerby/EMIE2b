@@ -10,11 +10,91 @@ library(vars)
 
 domain <- "https://api.scb.se/"
 
+substring <- c("M03", "M06", "M09", "M12")
+substring_pattern <- paste(substring, collapse = "|")
+
+
+##################################################
+#              CPIF 2012M01-2022M12              #  
+##################################################
+
+# PXWEB query 
+pxweb_query_list <-
+  list("ContentsCode" = c("000005HS"),
+       "Tid" = c(
+        "2012M01", "2012M02", "2012M03",
+        "2012M04", "2012M05", "2012M06",
+        "2012M07", "2012M08", "2012M09",
+        "2012M10", "2012M11", "2012M12",
+        "2013M01", "2013M02", "2013M03",
+        "2013M04", "2013M05", "2013M06",
+        "2013M07", "2013M08", "2013M09",
+        "2013M10", "2013M11", "2013M12",
+        "2014M01", "2014M02", "2014M03",
+        "2014M04", "2014M05", "2014M06",
+        "2014M07", "2014M08", "2014M09",
+        "2014M10", "2014M11", "2014M12",
+        "2015M01", "2015M02", "2015M03",
+        "2015M04", "2015M05", "2015M06",
+        "2015M07", "2015M08", "2015M09",
+        "2015M10", "2015M11", "2015M12",
+        "2016M01", "2016M02", "2016M03",
+        "2016M04", "2016M05", "2016M06",
+        "2016M07", "2016M08", "2016M09",
+        "2016M10", "2016M11", "2016M12",
+        "2017M01", "2017M02", "2017M03",
+        "2017M04", "2017M05", "2017M06",
+        "2017M07", "2017M08", "2017M09",
+        "2017M10", "2017M11", "2017M12",
+        "2018M01", "2018M02", "2018M03",
+        "2018M04", "2018M05", "2018M06",
+        "2018M07", "2018M08", "2018M09",
+        "2018M10", "2018M11", "2018M12",
+        "2019M01", "2019M02", "2019M03",
+        "2019M04", "2019M05", "2019M06",
+        "2019M07", "2019M08", "2019M09",
+        "2019M10", "2019M11", "2019M12",
+        "2020M01", "2020M02", "2020M03",
+        "2020M04", "2020M05", "2020M06",
+        "2020M07", "2020M08", "2020M09",
+        "2020M10", "2020M11", "2020M12",
+        "2021M01", "2021M02", "2021M03",
+        "2021M04", "2021M05", "2021M06",
+        "2021M07", "2021M08", "2021M09",
+        "2021M10", "2021M11", "2021M12",
+        "2022M01", "2022M02", "2022M03",
+        "2022M04", "2022M05", "2022M06",
+        "2022M07", "2022M08", "2022M09",
+        "2022M10", "2022M11", "2022M12"
+        ))
+
+
+# Download data
+cpif_data <-
+  pxweb_get(url = paste0(domain, "/OV0104/v1/doris/en/ssd/PR/PR0101/PR0101G/KPIF"),
+            query = pxweb_query_list)
+
+# Convert to data.frame
+cpif_df <- as.data.frame(cpif_data, column.name.type = "text", variable.value.type = "text")
+
+cpif_df <- cpif_df[grepl(substring_pattern, cpif_df$month), ]
+
+
+year_quarter <- cpif_df['quarter']
+cpif_data <- cpif_df[3]
+money_supply <- cpif_df[3]
+
+main_df <- cbind(year_quarter, cpif_data, money_supply)
+colnames(main_df)[2] <- "GDP_MSEK"
+colnames(main_df)[3] <- "M1_MSEK"
+
 ##################################################
 #            Quarterly GDP 2012 - 2022           #
 ##################################################
 
 gdp_api_path <- "OV0104/v1/doris/en/ssd/NR/NR0103/NR0103B/NR0103ENS2010T10SKv"
+
+a <- pxweb_interactive()
 
 # Quarterly GDP API link
 quarterly_gdp_api <- paste0(domain, gdp_api_path)
@@ -44,12 +124,6 @@ gdp_data <-
 
 # Convert to data.frame
 gdp_df <- as.data.frame(gdp_data, column.name.type = "text", variable.value.type = "text")
-
-##################################################
-#                   POLICY RATE                  #
-##################################################
-
-
 
 ##################################################
 #       QUARTERLY M1 SUPPLY GDP 2012 - 2022      #
@@ -173,12 +247,12 @@ colnames(combined_ts)[colnames(combined_ts) == "foc_gdp_ts"] <- "GDP"
 colnames(combined_ts)[colnames(combined_ts) == "soc_m1_ts"] <- "M1"
 
 # Use the VARselect command to find the optimal lag order
-var_select <- VARselect(combined_ts, type = "both")
+var_select <- VARselect(combined_ts, type = "const")
 var_select
 
 # Create object for VAR() output. We choice lag according
 # to AIC from VARSelect(), i.e. p = 10
-var_result <- VAR(combined_ts, p = 10, type = "both")
+var_result <- VAR(combined_ts, p = 10, type = "const")
 
 # Tets for autocorrelation through a multivariate
 # portmanteau test
@@ -192,31 +266,30 @@ serial.test(var_result)
 normality.test(var_result)$jb.mul$JB
 
 # "M1 do not cause GDP" --> can be rejected
-# (M1 do cause GDP)
+# (M1 may cause GDP)
 causality(var_result, cause = "M1")$Granger
 
 # "GDP do not cause M1" --> cannot be rejected
 causality(var_result, cause = "GDP")$Granger
 
-irf_gdp_to_m1 <- irf(var_result,
-              impulse = "GDP",
-              reponse = "M1",
-              n.ahead = 10,
-              boot = TRUE
-              )
+# irf_gdp_to_m1 <- irf(var_result,
+#               impulse = "GDP",
+#               reponse = "M1",
+#               n.ahead = 10,
+#               boot = TRUE
+#               )
 
 irf_m1_to_gdp <- irf(var_result,
               impulse = "M1",
               reponse = "GDP",
-              n.ahead = 44
+              n.ahead = 10
               )
-
-
-
-plot(irf_gdp_to_m1,
-    xlab = "Time",
-     main = "Response of GDP shock")
 
 plot(irf_m1_to_gdp,
     xlab = "Time",
      main = "Response of M1 shock")
+
+
+# plot(irf_gdp_to_m1,
+#     xlab = "Time",
+#      main = "Response of GDP shock")
