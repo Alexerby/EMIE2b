@@ -232,19 +232,28 @@ ADF.test(residuals(engle_granger))  # We reject H_=: no cointegration @ 5% sig. 
 foc_inflation <- ts(foc_inflation, start = 2012, frequency = 4)
 foc_m1 <- ts(foc_m1, start = 2012, frequency = 4)
 
-differenced_combined_ts_ <- ts.intersect(foc_inflation, foc_m1)
+differenced_combined_ts <- ts.intersect(foc_inflation, foc_m1)
 
 
-var_select <- VARselect(differenced_combined_ts_, type = "both")
+var_select <- VARselect(differenced_combined_ts, type = "both")
 
 #####################################################
 #                  Create VAR model                 #
 #####################################################
 
-var_result <- VAR(differenced_combined_ts_, p = 7, type = "both")
+var_result <- VAR(differenced_combined_ts, p = 7, type = "both")
 
 
-irf_m1_to_inflation <- irf(var_result, impulse = "m1", response = "inflation", n.ahead = 50)
+?causality
+
+causality(var_result, cause = "foc_m1")$Granger
+causality(var_result, cause = "foc_inflation")$Granger
+
+
+# USE THIS
+irf_m1_to_inflation <- irf(var_result, impulse = "foc_m1", response = "foc_inflation", n.ahead = 40)
 plot(irf_m1_to_inflation)
 
-irf <- irf(var_result, impulse = "inflation", response = "m1", n.ahead = 40)
+# USE THIS
+irf_inflation_to_m1 <- irf(var_result, impulse = "foc_inflation", response = "foc_m1", n.ahead = 40)
+plot(irf_inflation_to_m1)
