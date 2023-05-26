@@ -183,7 +183,6 @@ m1_df <- as.data.frame(m1_data,
                        variable.value.type = "text")
 
 # Make the data quarterly in order to match the number of rows
-substring <- c("M03", "M06", "M09", "M12")
 substring_pattern <- paste(substring, collapse = "|")
 m1_df <- m1_df[grepl(substring_pattern, m1_df$month), ]
 
