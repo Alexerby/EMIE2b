@@ -165,6 +165,6 @@ models_forecast <- function(hmax) {
 }
 
 # Call function
-# models_forecast(1)
-# models_forecast(12)
+models_forecast(1)
+models_forecast(12)
 models_forecast(24)
