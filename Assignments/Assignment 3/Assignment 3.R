@@ -28,10 +28,6 @@ silence(library(sandwich))
 # directory of forecasts.Rdata
 
 
-setwd(
-  "E:\\Uni\\Econometrics 2b\\R\\Assignments\\Assignment 3"
-)
-
 # Load created dataset
 tryCatch({
   load("forecasts.Rdata")
@@ -68,7 +64,7 @@ par(mfrow = c(3, 2))
 forecast_plot <- function(model, hmax, type) {
         # Plots for horizon = 1
         ts.plot(model, 
-        main = paste(type, "orecast (recursive)"),
+        main = paste(type, "forecast (recursive)"),
         col = "#008080")
         lines(window(cpif, start = origin_1), col = "#FF7F50")
         legend("topleft", legend = c("Inflation rate",
