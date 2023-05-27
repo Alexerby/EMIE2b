@@ -10,6 +10,7 @@ library(vars)
 
 domain <- "https://api.scb.se/"
 
+# Delete two rows below 
 substring <- c("M03", "M06", "M09", "M12")
 substring_pattern <- paste(substring, collapse = "|")
 
