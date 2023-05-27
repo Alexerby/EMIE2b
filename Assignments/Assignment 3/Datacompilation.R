@@ -4,6 +4,17 @@ library(sandwich)
 library(lmtest)
 library(pxweb)
 
+
+# This scripts compiles all the necessary data for assignment 3, however
+# we have placed this in a separate file since the compiling of all models
+# takes a long time. There will be a supplied .Rdata file in order for the
+# assessor of this assignment to not have to go through the process of
+# compiling all models.
+
+#############################################################
+#     PART 1: QUERYING STATISTIKDATABASEN THROUGH PXWEB API #
+#############################################################
+
 pxweb_query_list <-
   list("ContentsCode" = c("PR0101F1"),
        "Tid" = c(
@@ -131,44 +142,44 @@ models_forecast <- function(hmax) {
 
   for (i in 1:n_origins) {
 
-      origin <- origin_1 + (i - 1) / 12 # calculates origin monthly (1/12)
+    origin <- origin_1 + (i - 1) / 12 # calculates origin monthly (1/12)
 
-      dat <- window(cpif, end = origin) # subsetting our ts up to above defined origin
+    dat <- window(cpif, end = origin) # subsetting our ts up to above defined origin
 
-      #############################
-      #   FITTING ARIMA MODELS    #
-      #############################
+    #############################
+    #   FITTING ARIMA MODELS    #
+    #############################
 
-      # Constructing ARIMA model from dat object
-      model_arima <- auto.arima(dat)
+    # Constructing ARIMA model from dat object
+    model_arima <- auto.arima(dat)
 
-      # Forecast the arima model
-      forecast_arima <- forecast(model_arima, h = hmax)
+    # Forecast the arima model
+    forecast_arima <- forecast(model_arima, h = hmax)
 
-      # Fill matrix with a newly created column "mean"
-      re_arima_mean[i, ] <- forecast_arima$mean
+    # Fill matrix with a newly created column "mean"
+    re_arima_mean[i, ] <- forecast_arima$mean
 
-      # Append models to our respective lists
-      re_arima_models[[i]] <- model_arima
-      re_arima_forecasts[[i]] <- forecast_arima
+    # Append models to our respective lists
+    re_arima_models[[i]] <- model_arima
+    re_arima_forecasts[[i]] <- forecast_arima
 
 
-      #############################
-      #    FITTING AR(1) MODELS   #
-      #############################
+    #############################
+    #    FITTING AR(1) MODELS   #
+    #############################
 
-      # Constructing AR(1) model from same dat obj
-      model_ar1 <- Arima(dat, order = c(1, 0, 0))
+    # Constructing AR(1) model from same dat obj
+    model_ar1 <- Arima(dat, order = c(1, 0, 0))
 
-      # Forecast ARIMA model
-      forecast_ar1 <- forecast(model_ar1, h = hmax)
+    # Forecast ARIMA model
+    forecast_ar1 <- forecast(model_ar1, h = hmax)
 
-      # Append the mean value to matrix
-      re_ar1_mean[i, ] <- forecast_ar1$mean
+    # Append the mean value to matrix
+    re_ar1_mean[i, ] <- forecast_ar1$mean
 
-      # Append models to our respective lists
-      re_ar1_models[[i]] <- model_ar1
-      re_ar1_forecasts[[i]] <- forecast_ar1
+    # Append models to our respective lists
+    re_ar1_models[[i]] <- model_ar1
+    re_ar1_forecasts[[i]] <- forecast_ar1
 
   }
 
@@ -182,31 +193,16 @@ models_forecast <- function(hmax) {
   re_ar1_list <- lapply(re_ar1_forecasts, function(x) x[["mean"]])
   re_ar1_plot <- do.call(ts.union, re_ar1_list)
 
-
-  # Plotting the ARIMA model
-  ts.plot(re_arima_plot, main = "ARIMA forecasts (recursive)", col = "grey")
-  lines(window(cpif, start = origin_1), col = "blue")
-  legend("topleft", legend = c("Inflation rate", 
-                              paste(hmax, "-step forecast")),
-                              lty = 1,
-                              col = c("grey", "black"))
-
-  # Plotting the AR(1) model
-  ts.plot(re_ar1_plot, main = "AR forecasts (recursive)", col = "grey")
-  lines(window(cpif, start = origin_1), col = "blue")
-  legend("topleft", legend = c("Inflation rate",
-                              paste(hmax, "-step forecast")),
-                              lty = 1, col = c("grey", "black"))
-
   return(list(re_arima_plot = re_arima_plot, re_ar1_plot = re_ar1_plot))
 
 }
 
-# Call function
+# Store models in variables
 forecast_h1 <- models_forecast(1)
 forecast_h12 <- models_forecast(12)
 forecast_h24 <- models_forecast(24)
 
+# Save to .Rdata file
 save(
   cpif,
   forecast_h1,
