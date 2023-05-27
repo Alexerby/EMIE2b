@@ -113,6 +113,13 @@ re_arima_forecasts <- list()
 re_ar1_models <- list()
 re_ar1_forecasts <- list()
 
+# Create lists for our rolling models and forecasts
+ro_arima_models <- list()
+ro_arima_forecasts <- list()
+
+ro_ar1_models <- list()
+ro_ar1_forecasts <- list()
+
 
 ########################################
 #         Models for different h
@@ -127,28 +134,51 @@ models_forecast <- function(hmax) {
           frequency = frequency(cpif)
   )
 
+  colnames(re_arima_mean) <- paste0("h=", 1:hmax)
+
+
   # Create matrix for our AR(1) models
   re_ar1_mean <- ts(data = matrix(NA, nrow = n_origins, ncol = hmax),
             start = origin_1,
             frequency = frequency(cpif)
-)
+  )
 
-  # Add title for our ARIMA matrix: h = 1, 2,.., hmax
-  colnames(re_arima_mean) <- paste0("h=", 1:hmax)
-
-  # Add title for our AR matrix: h = 1, 2,.., hmax
   colnames(re_ar1_mean) <- paste0("h=", 1:hmax)
 
 
+  # Create matrix for our rolling ARIMA models
+  ro_arima_mean <- ts(
+    data = matrix(NA, nrow = n_origins, ncol = hmax),
+    start = origin_1,
+    frequency = frequency(cpif)
+  )
+
+  colnames(ro_arima_mean) <- paste0("h=", 1:hmax)
+
+
+
+  # Create matrix for our rolling AR(1) models
+  ro_ar1_mean <- ts(
+    data = matrix(NA, nrow = n_origins, ncol = hmax),
+    start = origin_1,
+    frequency = frequency(cpif)
+  )
+
+  colnames(ro_ar1_mean) <- paste0("h=", 1:hmax)
+
+
+  #################################################
+  #           RECUSRIVE MODELS LOOP               #
+  #################################################
   for (i in 1:n_origins) {
 
     origin <- origin_1 + (i - 1) / 12 # calculates origin monthly (1/12)
 
     dat <- window(cpif, end = origin) # subsetting our ts up to above defined origin
 
-    #############################
-    #   FITTING ARIMA MODELS    #
-    #############################
+    #######################################
+    #   FITTING RECURSIVE ARIMA MODELS    #
+    #######################################
 
     # Constructing ARIMA model from dat object
     model_arima <- auto.arima(dat)
@@ -164,9 +194,9 @@ models_forecast <- function(hmax) {
     re_arima_forecasts[[i]] <- forecast_arima
 
 
-    #############################
-    #    FITTING AR(1) MODELS   #
-    #############################
+    #######################################
+    #    FITTING RECURSIVE AR(1) MODELS   #
+    #######################################
 
     # Constructing AR(1) model from same dat obj
     model_ar1 <- Arima(dat, order = c(1, 0, 0))
@@ -202,17 +232,17 @@ models_forecast <- function(hmax) {
 }
 
 # Store models in variables
-forecast_h1 <- models_forecast(1)
-forecast_h12 <- models_forecast(12)
-forecast_h24 <- models_forecast(24)
+recursive_forecast_h1 <- models_forecast(1)
+recursive_forecast_h12 <- models_forecast(12)
+recursive_forecast_h24 <- models_forecast(24)
 
 # Save to .Rdata file
 save(
   cpif,
-  forecast_h1,
-  forecast_h12,
-  forecast_h24,
+  recursive_forecast_h1,
+  recursive_forecast_h12,
+  recursive_forecast_h24,
   file = "forecasts_new.Rdata"
 )
 
-forecast_h24$re_arima_mean
+recursive_forecast_h24$re_arima_mean

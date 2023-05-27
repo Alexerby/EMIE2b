@@ -11,7 +11,7 @@ setwd(
 
 # Load created dataset
 tryCatch({
-  load("forecasts_new.Rdata")
+  load("forecasts.Rdata")
 }, error = function(e) {
   message("
             The loading of forecasts.Rdata failed. Check so 
@@ -28,7 +28,7 @@ n_origins <- length(window(cpif, start = origin_1, end = 2020 + 10 / 12))
 par(mfrow = c(3, 2))
 
 # Plots for horizon = 1
-ts.plot(forecast_h1$re_arima_plot, 
+ts.plot(recursive_forecast_h1$re_arima_plot, 
         main = "ARIMA forecast (recursive)",
         col = "#008080")
 lines(window(cpif, start = origin_1), col = "#FF7F50")
@@ -37,7 +37,7 @@ legend("topleft", legend = c("Inflation rate",
                             lty = 1,
                             col = c("#FF7F50", "#008080"))
 
-ts.plot(forecast_h1$re_ar1_plot,
+ts.plot(recursive_forecast_h1$re_ar1_plot,
          main = "AR(1) forecast (recursive)",
         col = "#008080")
 lines(window(cpif, start = origin_1), col = "#FF7F50")
@@ -47,7 +47,7 @@ legend("topleft", legend = c("Inflation rate",
                             col = c("#FF7F50", "#008080"))
 
 # Plots for horizon = 12
-ts.plot(forecast_h12$re_arima_plot,
+ts.plot(recursive_forecast_h12$re_arima_plot,
         main = "ARIMA forecast (recursive)",
         col = "#008080")
 lines(window(cpif, start = origin_1), col = "#FF7F50")
@@ -56,7 +56,7 @@ legend("topleft", legend = c("Inflation rate",
                             lty = 1,
                             col = c("#FF7F50", "#008080"))
 
-ts.plot(forecast_h12$re_ar1_plot, 
+ts.plot(recursive_forecast_h12$re_ar1_plot, 
         main = "AR(1) forecast (recursive)",
         col = "#008080")
 lines(window(cpif, start = origin_1), col = "#FF7F50")
@@ -66,7 +66,7 @@ legend("topleft", legend = c("Inflation rate",
                             col = c("#FF7F50", "#008080"))
 
 # Plots for horizon = 24
-ts.plot(forecast_h24$re_arima_plot, 
+ts.plot(recursive_forecast_h24$re_arima_plot, 
         main = "ARIMA forecast (recursive)",
         col = "#008080")
 lines(window(cpif, start = origin_1), col = "#FF7F50")
@@ -75,7 +75,7 @@ legend("topleft", legend = c("Inflation rate",
                             lty = 1,
                             col = c("#FF7F50", "#008080"))
 
-ts.plot(forecast_h24$re_ar1_plot,
+ts.plot(recursive_forecast_h24$re_ar1_plot,
         main = "AR(1) forecast (recursive)",
         col = "#008080")
 lines(window(cpif, start = origin_1), col = "#FF7F50")
@@ -86,9 +86,7 @@ legend("topleft", legend = c("Inflation rate",
 
 
 
-
-# Bias testing
-
+# Bias testing (Question 3)
 # Define function for extracting pval for NW
 test_bias <- function(h, errors) {
   model <- lm(errors[, h] ~ 1)
@@ -129,28 +127,23 @@ newey <- function(hmax, model) {
 # as comments below
 
 # newey(hmax = 1, model = forecast_h12$re_arima_mean)
-newey(hmax = 12, model = forecast_h12$re_arima_mean)
-newey(hmax = 24, model = forecast_h24$re_arima_mean)
+newey(hmax = 12, model = recursive_forecast_h12$re_arima_mean)
+newey(hmax = 24, model = recursive_forecast_h24$re_arima_mean)
 
 # newey(hmax = 1, model = forecast_h12$re_ar1_mean)
-newey(hmax = 12, model = forecast_h12$re_ar1_mean)
-newey(hmax = 24, model = forecast_h24$re_ar1_mean)
+newey(hmax = 12, model = recursive_forecast_h12$re_ar1_mean)
+newey(hmax = 24, model = recursive_forecast_h24$re_ar1_mean)
 
 
+prec_pvals <- data.frame(
+  h = 1:hmax,
+  pval = NA
+)
 
-# prec_pvals <- data.frame(
-#   h = 1:hmax,
-#   pval = NA
-# )
+for (h in 1:hmax) {
+  test <- dm.test(re_error[, h], ro_error[, h], h = h)
 
+  prec_pvals$pval[h] <- test$p.value
+}
 
-# test_results <- sapply(1:hmax, function(h) {
-#   dm.test(re_error[, h], ro_error[, h], alternative = "two.sided", power = 2)
-# })
-
-
-# for (h in 1:hmax) {
-#   test <- dm.test(re_error[, h], ro_error[, h], h = h)
-
-#   prec_pvals$pval[h] <- test$p.value
-# }
+prec_pvals
