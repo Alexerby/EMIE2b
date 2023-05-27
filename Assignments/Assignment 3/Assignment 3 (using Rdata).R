@@ -1,4 +1,4 @@
-setwd("E:\\Uni\\Econometrics 2b\\R\\Assignments\\Assignment 3")
+
 
 # Load created dataset
 load("forecasts.Rdata")
