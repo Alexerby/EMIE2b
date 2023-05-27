@@ -102,9 +102,9 @@ cpif <- ts(cpif_df[, "cpif"], start = 1987, frequency = 12)
 
 
 # Create first origin
-origin_1 <- 2002 + 11/12
+origin_1 <- 2002 + 11 / 12
 
-n_origins <- length(window(cpif, start = origin_1, end = 2020 + 10/12))
+n_origins <- length(window(cpif, start = origin_1, end = 2020 + 10 / 12))
 
 # Create lists for our recursive models and forecasts
 re_arima_models <- list()
@@ -122,13 +122,13 @@ models_forecast <- function(hmax) {
 
 
   # Create matrix for our ARIMA models
-  re_arima_mean <- ts(data = matrix(NA, nrow = 216, ncol = hmax),
+  re_arima_mean <- ts(data = matrix(NA, nrow = n_origins, ncol = hmax),
           start = origin_1,
           frequency = frequency(cpif)
   )
 
   # Create matrix for our AR(1) models
-  re_ar1_mean <- ts(data = matrix(NA, nrow = 216, ncol = hmax),
+  re_ar1_mean <- ts(data = matrix(NA, nrow = n_origins, ncol = hmax),
             start = origin_1,
             frequency = frequency(cpif)
 )
@@ -193,8 +193,12 @@ models_forecast <- function(hmax) {
   re_ar1_list <- lapply(re_ar1_forecasts, function(x) x[["mean"]])
   re_ar1_plot <- do.call(ts.union, re_ar1_list)
 
-  return(list(re_arima_plot = re_arima_plot, re_ar1_plot = re_ar1_plot))
-
+  return(list(
+  re_arima_plot = re_arima_plot,
+  re_ar1_plot = re_ar1_plot,
+  re_arima_mean = re_arima_mean,
+  re_ar1_mean = re_ar1_mean
+  ))
 }
 
 # Store models in variables
@@ -208,5 +212,7 @@ save(
   forecast_h1,
   forecast_h12,
   forecast_h24,
-  file = "forecasts1.Rdata"
+  file = "forecasts_new.Rdata"
 )
+
+forecast_h24$re_arima_mean
