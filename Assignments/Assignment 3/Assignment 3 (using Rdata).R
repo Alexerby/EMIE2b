@@ -1,6 +1,19 @@
 
 # Load created dataset
-load("forecasts.Rdata")
+tryCatch({
+  load("forecasts.Rdata")
+}, error = function(e) {
+  message("
+            The loading of forecasts.Rdata failed. Check so 
+            that you have set your working directory to the 
+            directory where the forecasts.Rdata file exists
+            \n\n"
+            )
+  message(paste("Error message:", e$message))
+})
+
+
+
 
 origin_1 <- 2002 + 11 / 12
 
