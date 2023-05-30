@@ -27,19 +27,13 @@ silence(library(sandwich))
 # make sure that setwd() is properly configured to the
 # directory of forecasts.Rdata
 
+setwd(
+        "E:\\Uni\\Econometrics 2b\\R\\Assignments\\Assignment 3"
+)
 
 # Load created dataset
-tryCatch({
-  load("forecasts.Rdata")
-}, error = function(e) {
-  message("
-            The loading of forecasts.Rdata failed. Check so 
-            that you have set your working directory to the 
-            directory where the forecasts.Rdata file exists
-            \n\n"
-            )
-  message(paste("Error message:", e$message))
-})
+load("forecasts.Rdata")
+
 
 
 #########################################################
@@ -101,10 +95,9 @@ newey <- function(hmax, model) {
         outcome <- ts(
         data = matrix(NA, nrow = n_origins, ncol = hmax),
         start = origin_1,
-        frequency = frequency(cpif)
-        )
+        frequency = frequency(cpif))
 
-        # Loop through the origins 
+        # Loop through the origins
         for (i in 1:n_origins) {
                 # we do not want to include the origin itself
                 start_date <- origin_1 + i / 12
@@ -115,18 +108,15 @@ newey <- function(hmax, model) {
         colnames(outcome) <- paste0("h=", 1:hmax)
 
         error <- outcome - model
-
         newey_pval <- do.call(rbind, lapply(1:hmax, test_bias, error))
-
-        current_model <- deparse(substitute(model))
 
         return(list(error = error, newey = newey_pval))
 }
 
 
+
 # Store functions for all our recursive and rolling models. The $newey sublist
 # is used in this question (3) and the $error sublist for next question
-
 re_nw_arima_h12 <- newey(hmax = 12, model = recursive_forecast_h12$re_arima_mean)
 re_nw_arima_h24 <- newey(hmax = 24, model = recursive_forecast_h24$re_arima_mean)
 
@@ -149,8 +139,12 @@ re_nw_arima_h24$newey
 # Newey West for AR, h = 12
 re_nw_ar_h12$newey
 
-# Newey West for AR, h = 12
-re_nw_ar_h12$newey
+# Newey West for AR, h = 24
+re_nw_ar_h24$newey
+
+# This test have a null hypothesis of no bias, we can see from
+# the results above that we reject the null hypothesis the further
+# away the horizon.
 
 
 #########################################################
@@ -159,25 +153,17 @@ re_nw_ar_h12$newey
 
 # We currently have 2x3 recursive functions, we have
 # 3 different horizons, and two types (AR & ARIMA models).
-# However, test cant be performed on model with h = 1,
+# However, test can not be performed on model with h = 1,
 # making this question have 4 predictions.
 #
-# In addition to that we have also in the data compilation
+# In addition to that we also in the data compilation
 # script created rolling models, because they need to be used
 # for this last question when predicting p-values for the
 # Diebold-Mariano test.
 #
 # This implies that we will need to run this prediction test
 # 6 times. Thus, we are again creating a function for this.
-#
-# For ease of reading we are going to assign the error to
-# easy to read variables for this last question.
 
-
-
-
-re_nw_arima_h12$error
-ro_nw_arima_h12$error
 
 dm_test <- function(recursive_model, rolling_model, hmax, type) {
 
@@ -192,8 +178,10 @@ dm_test <- function(recursive_model, rolling_model, hmax, type) {
         prec_pvals$pval[h] <- test$p.value
         }
 
-        a <- cat("\nP-values for model type", toupper(type), "with hmax", hmax, ":\n\n")
-        a
+        cat(
+        "\nP-values for model type",
+        toupper(type), "with hmax", 
+        hmax, ":\n\n")
 
         prec_pvals
 }
@@ -205,3 +193,7 @@ dm_test(re_nw_arima_h24$error, ro_nw_arima_h24$error, hmax = 24, type = "Arima")
 # AR models
 dm_test(re_nw_ar_h12$error, ro_nw_ar_h12$error, hmax = 12, type = "AR")
 dm_test(re_nw_ar_h24$error, ro_nw_ar_h24$error, hmax = 24, type = "AR")
+
+
+# We can not reject the null hypothesis of
+# equal precision for any of our models on a 5% significance level.

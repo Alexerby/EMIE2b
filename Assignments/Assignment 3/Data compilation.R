@@ -96,7 +96,7 @@ px_data <- pxweb_get(url = "https://api.scb.se/OV0104/v1/doris/en/ssd/PR/PR0101/
 cpif_df <- as.data.frame(px_data, column.name.type = "text", variable.value.type = "text")
 colnames(cpif_df)[colnames(cpif_df) == "CPIF, annual changes, 1987=100"] = "cpif"
 
-cpif <- ts(cpif_df[, "cpif"], start = 1987, frequency = 12) 
+cpif <- ts(cpif_df[, "cpif"], start = 1987, frequency = 12)
 
 
 # Create first origin

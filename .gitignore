@@ -1,3 +1,10 @@
 *.txt
 .DS_Store
 .vscode
+.log
+.fls
+termpaper/termpaper_latex/latex*.log
+termpaper/termpaper_latex/latex*.bbl
+termpaper/termpaper_latex/latex*.aux
+termpaper/termpaper_latex/latex*.fdb_latexmk
+termpaper/termpaper_latex/latex*.gz

@@ -1,0 +1,247 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                   PACKAGES                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{mdframed}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage[default]{opensans}
+\usepackage{setspace}
+\usepackage{multicol}
+\usepackage[margin=1in]{geometry} % Adjust the margins as needed
+\usepackage{parskip}
+\usepackage{sectsty}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{adjustbox}
+\usepackage{wrapfig}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                   STYLES                          % 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{mydarkblue}{RGB}{19, 52, 85}
+
+\mdfdefinestyle{titlestyle}{
+    backgroundcolor=mydarkblue, 
+    fontcolor=white,
+    leftmargin=-80,
+    rightmargin=-80
+}
+
+\mdfdefinestyle{sectionstyle}{
+    backgroundcolor=mydarkblue,
+    fontcolor=white,
+    leftmargin=0,
+    rightmargin=0,
+    linewidth=0pt,
+    linecolor=mydarkblue,
+}
+ 
+\setstretch{1.25}
+\sectionfont{\color{mydarkblue}}  % sets colour of sections
+\subsectionfont{\color{mydarkblue}}  % sets colour of subsection
+
+\makeatletter
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}{3.25ex \@plus 1ex \@minus .2ex}{-1em}{\color{mydarkblue}\normalfont\small\bfseries}}
+\makeatother
+
+
+
+\let\oldtextit\textit
+\renewcommand{\textit}[1]{\textcolor{mydarkblue}{\oldtextit{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                   ENVIRONMENTS                    % 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Change padding and margin for \maketitle
+\setlength{\topmargin}{-1in}         % Adjust the top margin
+\setlength{\oddsidemargin}{0in}     % Adjust the left margin for odd-numbered pages
+\setlength{\evensidemargin}{0in}    % Adjust the left margin for even-numbered pages
+\setlength{\textwidth}{6.5in}       % Adjust the text width
+
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{mdframed}[style=titlestyle]
+    \vspace*{0.5in}
+    \hspace*{\dimexpr-\leftmargin-\oddsidemargin--1in}\raggedright % Positioning title
+    \textbf{\LARGE\@title} \\
+    \hspace*{\dimexpr-\leftmargin-\oddsidemargin--1in}\raggedright % Positioning text under title
+     An analysis of the relationship between inflation and money supply in Sweden \\
+    \vspace*{0.5in}
+  \end{mdframed}
+  \thispagestyle{empty}}
+\makeatother
+
+\newenvironment{myenv}
+{
+    \color{mydarkblue} % Set font color to medium grey
+    \fontsize{9pt}{9pt}\selectfont % Set font size to 10pt
+
+}
+{
+    % Optional code for the end of the environment
+}
+
+\renewcommand{\arraystretch}{1.25} 
+
+
+
+
+\title{Inflationary Tendencies of Increases in M1}
+\date{}
+
+\begin{document}
+\textcolor{mydarkblue}{\textbf{Course: }EC2408} \\
+\textcolor{mydarkblue}{\textbf{Author}: Alexander Eriksson Byström (20020228-0293)}
+\hspace*{5cm}\textcolor{mydarkblue}{\textbf{\today}} 
+
+    \maketitle
+
+    \vspace*{1cm}
+    \section*{Introduction}
+    As of writing this paper the American Congress is dealing with another debt crisis where the Joe
+    Biden Administrationis negotiating with the speaker of the House of Represenatatives Kevin Mc-
+    Carthy about raising the national debt ceiling of \$31,4T in order to not default on its current debt.
+    In reality, the United States hit its debt ceiling already, in January this year, but have been able to
+    move assets and provide enough liquidity to not default. However, the method of shuffling existing
+    resources is not sustainable in the long run and if the administration and the Republicans do not
+    strike a deal by next week we will find ourselves in a financial crisis making the economic impact of
+    theCorona-pandemic seem like a breeze in comparison.
+
+    When the Standard \& Poors 500 indice dove 35,92%1 in 32 business days Fed had no choice but
+    to react, and the response involved implementing quantitative easing and balance sheet operations,
+    which effectively expanded the money supply 5 times over the following twelve months.
+
+    In Sweden, the monetary policy of the Riksbank have not been as expansive as the policy of Fed.
+    However, Corona naturally had an immense impact and an expansive monetary policy was also
+    here unevitable. Some of the monetary policies here included loans of 500BSEK to swedish banks,
+    purchasing of securities of up to 300BSEK and in addition to that offering of loans in USD.2 Despite
+    the relatively moderate monetary policies implemented by the Riksbank, there was a notable increase
+    in the money supply. This occurred during the period of persistently low interest rates that prevailed
+    during 2020. Commercial banks found it advantageous to borrow from the Riksbank to effectively
+    utilize the fractional reserve banking system, which in turn had an impact on the M1 money supply.
+
+    This paper aims to examine the conventional economic dogma that asserts a positive relationship
+    between the money supply and inflationary pressure. To accomplish this, vector autoregressive
+    models and impulse response functions will be employed for analysis.
+
+    \newpage
+
+    \vspace*{1cm}
+    \section*{Data}
+    We have in the study selected monthly data from Statistics Swedens ”Statistikdatabasen” for money
+    supply measured in M1 and the annual change in consumer price index (i.e. inflation). The data
+    span is limited to between January 2004 to November 2022, giving us 232 observations. The chosen
+    time limitation is not arbitrary but is based on the available data. In this case, the first
+    observation for the M1 variable is in January 2004, while the last observation for both our variables
+    is in April 2023, as obtained from Statistics Sweden’s ”Statistikdatabas.” By using this time range,
+    the aim is to include as much of the variance in the dataset as possible, considering the available
+    data points.
+
+    \section*{Empirical process and Results}
+    \subsection*{Rationale for Incorporation of a Trend Model}
+    Before exposing our data to any tests, we need to evaluate what type of model we are going 
+    to use throughout our analysis. I am here going to argue that in the context of inflation and money 
+    supply both variables have a deterministic trend component, this due to two factors. Firstly inflation
+    is not considered a stochastic process since changes in other economic variables such as changes
+    in monetary policy, supply and demand dynamics, and the fiscal policies have an impact on the change in 
+    prices. Secondly, since M1 represents the most liquid form of money, this money will reasonably be 
+    highly influenced by the Riksbanks monetary policy, fiscal policy and the underlying economic condition.
+    Therefore, I argue that this variable should not be considered stochastic.\footnote{We can also see
+    that our variables, particularly M1, does exhibit a pattern of trend when looking at the decomposition
+    of the timeseries (figure 1.1 and 1.2), advancing the proposition of using a model with trend.}
+    
+    \subsection*{Exploring Stationarity and Cointegration: Analyzing Time Series Properties}
+        \paragraph*{ADF test}
+        \paragraph*{Differencing}
+        \paragraph*{Cointegration}
+    
+    \subsection*{Model Selection and VAR Modeling: Finding the Best Fit}
+        \paragraph*{Varselect (selecting best lag for model)}
+        \paragraph*{Establishing the model (var result)}
+
+    \subsection*{Assessing Model Validity: Diagnostic Testing for VAR Analysis}
+
+        \paragraph*{Residual Analysis} is performed using the \textit{autocorrelation function} and 
+        \textit{Ljung-Box test}.The autocorrelation function shows us a strong autocorrelation in as well
+        inflation as in M1 supply. The autocorrelation in inflation, in contrast, exhibits a considerably 
+        more rapid decrease compared to the autocorrelation in M1. A significant autocorrelation in inflation 
+        is exhibited for approximately one year, where as the autocorrelation in M1 is shown to last much longer,
+        approximately 5 years.\footnote{Figure not in included.} When performing a Ljung-Box test we can confirm that 
+        the model does exhibit autocorrelation with a p-value of 1.182e-04, which is noticeably below our significance 
+        level used throughout this analysis of 5\%.
+
+        \paragraph*{Model Fit and Assumptions} must be confirmed using a Jarque-Bera test. Here we examine whether 
+        the model is exercising a normal distribution ($H_0: JB = 0$), or if we can see that our variables are exercising
+        a distribution which is not normally distributed.
+
+
+
+    \newpage
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Stationarity testing         % 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Decomposition graphs
+    \begin{mdframed}[style=sectionstyle]
+        Decomposition of Inflation and Money Supply
+    \end{mdframed}
+    \begin{figure}[htbp]
+        \includegraphics*[width=0.5\textwidth]{../graphs/Decomposition of Inflation.png}%
+        \includegraphics*[width=0.5\textwidth]{../graphs/Decomposition of M1.png}
+        \vspace{-\baselineskip}
+        \begin{myenv}
+            \hspace*{0.1\textwidth}
+            Figure 1.1: Decomposition of Inflation \hspace*{0.15\textwidth} 
+            Figure 1.2: Decomposition of M1
+        \end{myenv}
+    \end{figure}
+    \vspace*{0.1cm}
+    \begin{mdframed}[style=sectionstyle]
+        Augmented Dickey Fuller: testing for stationarity
+    \end{mdframed}
+        
+    % Tabular: CPI & CPI (first-order-difference)
+    \begin{adjustbox}{width=\textwidth}
+        \tiny % Set the font size to 10pt
+            \begin{tabular}{lrrrrr}
+                \rowcolor{mydarkblue}
+                \textcolor{white}{Test Statistic}     & \textcolor{white}{Cval $I(0)$}        & \textcolor{white}{Cval $I(1)$}            & \textcolor{white}{1pct}           & \textcolor{white}{5pct}     & \textcolor{white}{10pct}                   \\
+                $\tau_3$                              &-1.56                                  &-6.09                                      &-3.99                              &-3.43                        &-3.13                       \\
+                $\phi_3$                              & 1.81                                  & 18.57                                     & 8.43                              & 6.49                        & 5.47                       \\
+                $\tau_2$                              &-1.15                                  &-5.97                                      &-3.46                              &-2.88                        &-2.57                       \\
+                $\phi_1$                              & 1.04                                  & 17.84                                     & 6.52                              & 4.63                        & 3.81                       \\
+                $\tau_1$                              &-0.41                                  &-5.93                                      &-2.58                              &-1.95                        &-1.62                       \\
+            \end{tabular}
+            \hspace*{0.5cm}
+
+            
+            \begin{tabular}{lrrrrr}
+                \rowcolor{mydarkblue}
+                \textcolor{white}{Test Statistic}     & \textcolor{white}{Cval $I(0)$}        & \textcolor{white}{Cval $I(1)$}            & \textcolor{white}{1pct}           & \textcolor{white}{5pct}     & \textcolor{white}{10pct}             \\
+                $\tau_3$                              &-1.60                                  &-5.61                                      &-3.99                              &-3.43                        &-3.13                                 \\
+                $\phi_3$                              & 1.78                                  & 15.94                                     & 8.43                              & 6.49                        & 5.47                                 \\
+                $\tau_2$                              & 0.41                                  &-5.56                                      &-3.46                              &-2.88                        &-2.57                                 \\
+                $\phi_1$                              & 4.28                                  &15.48                                      & 6.52                              & 4.63                        & 3.81                                 \\
+                $\tau_1$                              & 2.67                                  &-4.68                                      &-2.58                              &-1.95                        &-1.62                                 \\
+            \end{tabular}
+            \vspace*{0.5cm}
+    \end{adjustbox}
+    \begin{myenv}
+        \hspace*{0.1\textwidth}
+        Table 1.1: Augmented Dickey Fuller CPI
+        \hspace*{0.15\textwidth}
+        Table 1.2: Augmented Dickey Fuller M1
+    \end{myenv}
+
+
+
+    
+\end{document}
