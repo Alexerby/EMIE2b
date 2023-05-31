@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1685484354 "e:/Uni/Econometrics 2b/R/termpaper/termpaper_latex/latex/main2.tex" "main2.pdf" "main2" 1685484355 0
-  "../graphs/Decomposition of Inflation.png" 1685472442 16774 3e770f02eb0c18e0716022a166eec298 ""
-  "../graphs/Decomposition of M1.png" 1685472411 15864 5dfefbf91f608aaaa35732a314b2ae9d ""
+["pdflatex"] 1685526939 "e:/Uni/Econometrics 2b/R/termpaper/termpaper_latex/latex/main2.tex" "main2.pdf" "main2" 1685526940 0
+  "../graphs/Decomposition of Inflation.png" 1685520887 7005 1aa69428f08ce3b0e0336ab417b983dc ""
+  "../graphs/Decomposition of M1.png" 1685520752 6730 7d732cacb6ad27ed70c1f55ee534c6b0 ""
   "C:/Users/alexa/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1685398685 143715 15def80d94da65965abcd3736ee0043d ""
   "C:/Users/alexa/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1685302125 23185556 bb06f82de39bddcb9f9573a65d15e331 ""
   "C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_iz27ck.enc" 1561406057 2880 c07f4a1ce14a88d4ebe18f1c7b4592c1 ""
@@ -97,9 +97,9 @@
   "C:/Users/alexa/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "C:/Users/alexa/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-abspage.sty" 1650051284 2245 c8a4088d07cffc2e5207730c738edd76 ""
   "C:/Users/alexa/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-base.sty" 1650051284 20785 71a3d72ab517959a6979c27e6176bec1 ""
-  "e:/Uni/Econometrics 2b/R/termpaper/termpaper_latex/latex/main2.tex" 1685484353 13437 b60cf8ca9d9633093fed886701797474 ""
-  "main2.aux" 1685484355 104 ad23aeae5c10c9281aebda3770bd8972 "pdflatex"
-  "main2.tex" 1685484353 13437 b60cf8ca9d9633093fed886701797474 ""
+  "e:/Uni/Econometrics 2b/R/termpaper/termpaper_latex/latex/main2.tex" 1685526938 15623 5f125176ca32a9dafdcfd24f1af80303 ""
+  "main2.aux" 1685526940 104 ad23aeae5c10c9281aebda3770bd8972 "pdflatex"
+  "main2.tex" 1685526938 15623 5f125176ca32a9dafdcfd24f1af80303 ""
   (generated)
   "main2.aux"
   "main2.log"

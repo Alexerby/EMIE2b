@@ -104,17 +104,17 @@
     \maketitle
 
     \vspace*{1cm}
-    \section*{Introduction}
+    \section*{Introduction: In the face of economic adversity}
     As of writing this paper the American Congress is dealing with another debt crisis where the Joe
     Biden Administrationis negotiating with the speaker of the House of Represenatatives Kevin Mc-
-    Carthy about raising the national debt ceiling of \$31,4T in order to not default on its current debt.
+    Carthy about raising the national debt ceiling of \$31.4T in order to not default on its current debt.
     In reality, the United States hit its debt ceiling already, in January this year, but have been able to
     move assets and provide enough liquidity to not default. However, the method of shuffling existing
     resources is not sustainable in the long run and if the administration and the Republicans do not
     strike a deal by next week we will find ourselves in a financial crisis making the economic impact of
     theCorona-pandemic seem like a breeze in comparison.
 
-    When the Standard \& Poors 500 indice dove 35,92%1 in 32 business days Fed had no choice but
+    When the Standard \& Poors 500 indice dove 35.92\% in 32 business days Fed had no choice but
     to react, and the response involved implementing quantitative easing and balance sheet operations,
     which effectively expanded the money supply 5 times over the following twelve months.
 
@@ -144,30 +144,52 @@
     the aim is to include as much of the variance in the dataset as possible, considering the available
     data points.
 
-    \section*{Empirical process and Results}
-    \subsection*{Rationale for Incorporation of a Trend Model}
-    Before exposing our data to any tests, we need to evaluate what type of model we are going 
-    to use throughout our analysis. I am here going to argue that in the context of inflation and money 
-    supply both variables have a deterministic trend component, this due to two factors. Firstly inflation
-    is not considered a stochastic process since changes in other economic variables such as changes
-    in monetary policy, supply and demand dynamics, and the fiscal policies have an impact on the change in 
-    prices. Secondly, since M1 represents the most liquid form of money, this money will reasonably be 
-    highly influenced by the Riksbanks monetary policy, fiscal policy and the underlying economic condition.
-    Therefore, I argue that this variable should not be considered stochastic.\footnote{We can also see
-    that our variables, particularly M1, does exhibit a pattern of trend when looking at the decomposition
-    of the timeseries (figure 1.1 and 1.2), advancing the proposition of using a model with trend.}
+    \section*{Empirical Methodology and Obtained Results}
     
     \subsection*{Exploring Stationarity and Cointegration: Analyzing Time Series Properties}
-        \paragraph*{ADF test}
-        \paragraph*{Differencing}
-        \paragraph*{Cointegration}
+
+        \paragraph*{Rationale for Incorporation of a Trend Model.}
+        Before constructing our model, we need to evaluate what type of model we are going 
+        to use throughout our analysis. I am here going to argue that in the context of inflation and money 
+        supply both variables have a deterministic trend component, this due to two factors. Firstly inflation
+        is not considered a stochastic process since changes in other economic variables such as changes
+        in monetary policy, supply and demand dynamics, and the fiscal policies have an impact on the change in 
+        prices. Secondly, since M1 represents the most liquid form of money, this money will reasonably be 
+        highly influenced by the Riksbanks monetary policy, fiscal policy and the underlying economic condition. 
+        \footnote{This is not to say that other types of money beside Fiat Money would be less influenced. 
+        Nevertheless, it is stating that M1 is highly impacted but the mentioned policy and conditions.}
+        Therefore, I argue that this variable should not be considered stochastic.\footnote{We can also see
+        that our variables, particularly M1, does exhibit a pattern of trend when looking at the decomposition
+        of the timeseries (figure 1.1 and 1.2), advancing the proposition of using a model with trend.}
+
+        \paragraph*{Augmented Dickey Fuller test.} The first test which we need to subject our model to 
+        is the ADF test. Here we test the null ($H_0$) of a prevalent unit root. This test is a one-sided 
+        test conducted on the negative side. We will be focusing on the $\tau_3$ statistics due to the
+        incorporation of a coefficient and trend in accordance with the argument in the paragraph above.
+        The conclusion from this test is that we are from now on dealing with two models integrated of the 
+        first order ($I(1)$).\footnote{See Table 1.1 \& 1.2.}
+        
+        \paragraph*{Cointegration.}
+        Due to us now dealing with two models integrated of the first order we need to test whether there 
+        exists any long-term equilibrium relationship between inflation and M1. More specifically, we need 
+        to construct a linear combination of our integrated variables and perform an Engle-Granger test 
+        which is a test where we regress our error correction term on its lagged values and lagged 
+        differences. I am here going to argue for using money supply as the dependent variable in our 
+        linear regression as money supply in conformity with traditional economics would be a driving 
+        cause of inflation (if M1 outpaces economic growth). The second step in our EG-ADF test is the ADF 
+        test itself. The outcome of the EG-ADF test, when looking at $\tau_2$ (intercept, no trend) is that 
+        we find a value of -1.57 which implies that we can not reject the null of no cointegration when comparing 
+        it to the critical value for the EG-ADF test of -3.41.\footnote{For full table of critical values for 
+        EG-ADF statistic, see Stock, James \& Watson Mark (2019). Introduction to Econometrics, p. 665.} 
+        Therefore, based on our dataset, Engle-Granger ADF test does not appear to provide sufficient 
+        evidence of cointegration between M1 and inflation.
+
     
     \subsection*{Model Selection and VAR Modeling: Finding the Best Fit}
         \paragraph*{Varselect (selecting best lag for model)}
         \paragraph*{Establishing the model (var result)}
 
     \subsection*{Assessing Model Validity: Diagnostic Testing for VAR Analysis}
-
         \paragraph*{Residual Analysis} is performed using the \textit{autocorrelation function} and 
         \textit{Ljung-Box test}.The autocorrelation function shows us a strong autocorrelation in as well
         inflation as in M1 supply. The autocorrelation in inflation, in contrast, exhibits a considerably 
@@ -213,7 +235,7 @@
         \tiny % Set the font size to 10pt
             \begin{tabular}{lrrrrr}
                 \rowcolor{mydarkblue}
-                \textcolor{white}{Test Statistic}     & \textcolor{white}{Cval $I(0)$}        & \textcolor{white}{Cval $I(1)$}            & \textcolor{white}{1pct}           & \textcolor{white}{5pct}     & \textcolor{white}{10pct}                   \\
+                \textcolor{white}{Test Statistic}     & \textcolor{white}{$I(0)$}        & \textcolor{white}{$I(1)$}            & \textcolor{white}{1pct}           & \textcolor{white}{5pct}     & \textcolor{white}{10pct}                   \\
                 $\tau_3$                              &-1.56                                  &-6.09                                      &-3.99                              &-3.43                        &-3.13                       \\
                 $\phi_3$                              & 1.81                                  & 18.57                                     & 8.43                              & 6.49                        & 5.47                       \\
                 $\tau_2$                              &-1.15                                  &-5.97                                      &-3.46                              &-2.88                        &-2.57                       \\
@@ -225,7 +247,7 @@
             
             \begin{tabular}{lrrrrr}
                 \rowcolor{mydarkblue}
-                \textcolor{white}{Test Statistic}     & \textcolor{white}{Cval $I(0)$}        & \textcolor{white}{Cval $I(1)$}            & \textcolor{white}{1pct}           & \textcolor{white}{5pct}     & \textcolor{white}{10pct}             \\
+                \textcolor{white}{Test Statistic}     & \textcolor{white}{$I(0)$}        & \textcolor{white}{$I(1)$}            & \textcolor{white}{1pct}           & \textcolor{white}{5pct}     & \textcolor{white}{10pct}             \\
                 $\tau_3$                              &-1.60                                  &-5.61                                      &-3.99                              &-3.43                        &-3.13                                 \\
                 $\phi_3$                              & 1.78                                  & 15.94                                     & 8.43                              & 6.49                        & 5.47                                 \\
                 $\tau_2$                              & 0.41                                  &-5.56                                      &-3.46                              &-2.88                        &-2.57                                 \\
@@ -240,8 +262,7 @@
         \hspace*{0.15\textwidth}
         Table 1.2: Augmented Dickey Fuller M1
     \end{myenv}
-
-
+            
 
     
 \end{document}

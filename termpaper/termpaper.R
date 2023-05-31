@@ -164,45 +164,35 @@ legend(
 
 
 
+####################################################
+#         Test autocorrelation                     #
+####################################################
+acf(m1, lag.max = 80)         # not included in paper due to space
+acf(inflation, lag.max = 20)  # not included in paper due to space
 
-#######################################################################
-#                                                                     #
-#                        Diagnostic Testing                           #
-#                                                                     #
-#######################################################################
-
-#####################################################
-#                Test autocorrelation               #
-#####################################################
-acf(m1, lag.max = 80)
-acf(inflation, lag.max = 20)
 
 #####################################################
-#   Examine residuals distribution                  #
+#           Evaluate type of model                  #
 #####################################################
+# Evaluate if we want to use none, drift or trend when
+# constructing our VAR model
+plot(decompose(m1))
+plot(decompose(inflation))
 
-jarque.bera.test(residuals(cpi_df$inflation))
-jarque.bera.test(residuals(m1))
-residuals(m1_df)
-#####################################################
-#                Test stationarity                  #
-#####################################################
 
-########################################
-#  Testing inflation for stationarity  #
-########################################
-ADF.test(cpi_df$inflation)
-      # Can not reject H_0: unit root @ 5% sig. level
+####################################################
+#          Test stationarity                       #
+####################################################
+
+# Inflation
+ADF.test(cpi_df$inflation)  # Can not reject H_0: unit root @ 5% sig. level
 fod_inflation <- diff(cpi_df$inflation)
-ADF.test(fod_inflation)         # Can reject H_0: unit root @ 5% sig. level
+ADF.test(fod_inflation)     # Can reject H_0: unit root @ 5% sig. level
 
-#########################################
-# Testing money supply for stationarity #
-#########################################
+# M1
 ADF.test(m1_df$m1_supply)       # Can not reject H_0: unit root @ 5% sig. level
 fod_m1 <- diff(m1_df$m1_supply)
 ADF.test(fod_m1)                # Can reject H_0: unit root @ 5% sig. level
-
 
 # Note both inflation and money supply are of first order integration I(1)
 # so we need to perform an Engle-Granger-ADF test for cointegration
@@ -210,35 +200,33 @@ ADF.test(fod_m1)                # Can reject H_0: unit root @ 5% sig. level
 #####################################################
 #          Test for cointegration (both I(1))       #
 #####################################################
-
-engle_granger <- lm(cpi_df$inflation ~ m1_df$m1_supply)
-ADF.test(residuals(engle_granger))  # We reject H_=: no cointegration @ 5% sig. level
-# |tau3| < |(cval @ 5% sig. level) implies ⇒ No cointegration
+engle_granger <- lm(m1 ~ inflation)
+ADF.test(residuals(engle_granger))  
+# Can not reject that no cointegration exists,
+# compared to the critical value of the Engle-Granger
+# ADF statistic table (-3.41)
 
 
 #####################################################
 #           Identify VAR lag order                  #
 #####################################################
 
-# Evaluate if we want to use none, drift or trend when
-# constructing our VAR model
-plot(decompose(m1))
-plot(decompose(inflation))
-
-# Create ts objects of variables
+# Create ts objects of differenced variables
 fod_inflation <- ts(fod_inflation, start = 2004, frequency = 12)
 fod_m1 <- ts(fod_m1, start = 2004, frequency = 12)
 
 differenced_combined_ts <- ts.intersect(fod_inflation, fod_m1)
 
 
-VARselect(differenced_combined_ts, type = "both")
+VARselect(differenced_combined_ts, type = "both")$selection
+
+AIC <- VARselect(differenced_combined_ts, type = "both")$selection["AIC(n)"]
 
 #####################################################
 #                  Create VAR model                 #
 #####################################################
 
-var_result <- VAR(differenced_combined_ts, p = 6, type = "both")
+var_result <- VAR(differenced_combined_ts, p = AIC, type = "both")
 
 
 # Finish the diagnostic test of multivariate autocorrelation
@@ -282,3 +270,5 @@ irf_inflation_to_m1,
 main = "Impulse Response from shock in Inflation",
 ylab = "Money supply, (M1)"
 )
+
+
