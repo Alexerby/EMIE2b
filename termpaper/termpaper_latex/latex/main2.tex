@@ -9,13 +9,16 @@
 \usepackage[default]{opensans}
 \usepackage{setspace}
 \usepackage{multicol}
-\usepackage[margin=1in]{geometry} % Adjust the margins as needed
+\usepackage[margin=1in, headsep=2cm]{geometry}
 \usepackage{parskip}
 \usepackage{sectsty}
 \usepackage{colortbl}
 \usepackage{array}
 \usepackage{adjustbox}
 \usepackage{wrapfig}
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                   STYLES                          % 
@@ -133,10 +136,9 @@
 
     \newpage
 
-    \vspace*{1cm}
-    \section*{Data}
+    \subsection*{Data}
     We have in the study selected monthly data from Statistics Swedens ”Statistikdatabasen” for money
-    supply measured in M1 and the annual change in consumer price index (i.e. inflation). The data
+    supply measured in M1 and the annual change in consumer price index (i.e.\ inflation). The data
     span is limited to between January 2004 to November 2022, giving us 232 observations. The chosen
     time limitation is not arbitrary but is based on the available data. In this case, the first
     observation for the M1 variable is in January 2004, while the last observation for both our variables
@@ -155,9 +157,12 @@
         is not considered a stochastic process since changes in other economic variables such as changes
         in monetary policy, supply and demand dynamics, and the fiscal policies have an impact on the change in 
         prices. Secondly, since M1 represents the most liquid form of money, this money will reasonably be 
-        highly influenced by the Riksbanks monetary policy, fiscal policy and the underlying economic condition. 
-        \footnote{This is not to say that other types of money beside Fiat Money would be less influenced. 
-        Nevertheless, it is stating that M1 is highly impacted but the mentioned policy and conditions.}
+        highly influenced by the Riksbanks monetary policy, fiscal policy and the underlying economic 
+        condition.\footnote
+        {
+        This is not to say that other types of money beside Fiat Money would be less influenced. 
+        Nevertheless, it is stating that M1 is highly impacted but the mentioned policy and conditions.
+        }
         Therefore, I argue that this variable should not be considered stochastic.\footnote{We can also see
         that our variables, particularly M1, does exhibit a pattern of trend when looking at the decomposition
         of the timeseries (figure 1.1 and 1.2), advancing the proposition of using a model with trend.}
@@ -180,14 +185,21 @@
         test itself. The outcome of the EG-ADF test, when looking at $\tau_2$ (intercept, no trend) is that 
         we find a value of -1.57 which implies that we can not reject the null of no cointegration when comparing 
         it to the critical value for the EG-ADF test of -3.41.\footnote{For full table of critical values for 
-        EG-ADF statistic, see Stock, James \& Watson Mark (2019). Introduction to Econometrics, p. 665.} 
+        EG-ADF statistic: Stock, James \& Watson Mark (2019). Introduction to Econometrics, p. 665.} 
         Therefore, based on our dataset, Engle-Granger ADF test does not appear to provide sufficient 
         evidence of cointegration between M1 and inflation.
 
     
     \subsection*{Model Selection and VAR Modeling: Finding the Best Fit}
-        \paragraph*{Varselect (selecting best lag for model)}
-        \paragraph*{Establishing the model (var result)}
+        \paragraph*{Selecting an appropriate lag order for our model.}
+        When choosing an appropriate lag for our VAR model, we will be using Akaikes Information Criteria (AIC),
+        primarily due to its widely accepted use in econometrics. Using AIC allows for easier replication and 
+        comparison of results across studies since researchers can use the same criterion to select the lag 
+        order in VAR models. In our case, based on the evaluation using AIC, we have determined that the 
+        appropriate lag order for our VAR model with inflation and M1 is 3. Therefore, we will proceed with this 
+        lag order for our analysis.
+
+        \paragraph*{Diagnostic testing of the VAR model.}
 
     \subsection*{Assessing Model Validity: Diagnostic Testing for VAR Analysis}
         \paragraph*{Residual Analysis} is performed using the \textit{autocorrelation function} and 

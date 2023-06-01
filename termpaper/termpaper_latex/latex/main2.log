@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.5.28)  31 MAY 2023 11:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.5.28)  1 JUN 2023 11:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -393,29 +393,29 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \WF@everypar=\toks22
 Package: wrapfig 2003/01/31  v 3.6
 )
-LaTeX Font Info:    Trying to load font information for OT1+opensans-TLF on input line 99.
+LaTeX Font Info:    Trying to load font information for OT1+opensans-TLF on input line 102.
  (C:\Users\alexa\AppData\Local\Programs\MiKTeX\tex/latex/opensans\ot1opensans-tlf.fd
 File: OT1opensans-TLF.fd 2019/06/24 Font definitions for OT1/opensans-TLF.
 )
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/m/n' will be
-(Font)              scaled to size 10.0pt on input line 99.
+(Font)              scaled to size 10.0pt on input line 102.
  (main2.aux)
 \openout1 = `main2.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
  (C:\Users\alexa\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count289
@@ -456,7 +456,7 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * \evensidemargin=0.0pt
 * \topmargin=-72.26999pt
 * \headheight=12.0pt
-* \headsep=25.0pt
+* \headsep=56.9055pt
 * \topskip=10.0pt
 * \footskip=30.0pt
 * \marginparwidth=65.0pt
@@ -473,66 +473,66 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/b/n' will be
-(Font)              scaled to size 10.0pt on input line 100.
+(Font)              scaled to size 10.0pt on input line 103.
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/b/n' will be
-(Font)              scaled to size 17.28pt on input line 104.
+(Font)              scaled to size 17.28pt on input line 107.
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/m/n' will be
-(Font)              scaled to size 14.4pt on input line 107.
+(Font)              scaled to size 14.4pt on input line 110.
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/b/n' will be
-(Font)              scaled to size 14.4pt on input line 107.
-LaTeX Font Info:    Trying to load font information for TS1+opensans-TLF on input line 110.
+(Font)              scaled to size 14.4pt on input line 110.
+LaTeX Font Info:    Trying to load font information for TS1+opensans-TLF on input line 113.
 (C:\Users\alexa\AppData\Local\Programs\MiKTeX\tex/latex/opensans\ts1opensans-tlf.fd
 File: TS1opensans-TLF.fd 2019/06/24 Font definitions for TS1/opensans-TLF.
 )
 LaTeX Font Info:    Font shape `TS1/opensans-TLF/m/n' will be
-(Font)              scaled to size 10.0pt on input line 110.
+(Font)              scaled to size 10.0pt on input line 113.
  [1
 
 {C:/Users/alexa/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_n3lhbv.enc}{C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_nvvucy.enc}]
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/m/n' will be
-(Font)              scaled to size 12.0pt on input line 149.
+(Font)              scaled to size 12.0pt on input line 139.
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/b/n' will be
-(Font)              scaled to size 12.0pt on input line 149.
+(Font)              scaled to size 12.0pt on input line 139.
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 152.
+(Font)              scaled to size 9.0pt on input line 154.
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/b/n' will be
-(Font)              scaled to size 9.0pt on input line 152.
+(Font)              scaled to size 9.0pt on input line 154.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 159.
+(Font)              <7> on input line 162.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 159.
+(Font)              <5> on input line 162.
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/m/n' will be
-(Font)              scaled to size 7.0pt on input line 159.
+(Font)              scaled to size 7.0pt on input line 162.
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/m/n' will be
-(Font)              scaled to size 8.0pt on input line 160.
+(Font)              scaled to size 8.0pt on input line 165.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 160.
+(Font)              <8> on input line 165.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 160.
+(Font)              <6> on input line 165.
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/m/n' will be
-(Font)              scaled to size 6.0pt on input line 160.
+(Font)              scaled to size 6.0pt on input line 165.
  [2]
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/m/it' will be
-(Font)              scaled to size 10.0pt on input line 193.
+(Font)              scaled to size 10.0pt on input line 205.
  [3{C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_iz27ck.enc}]
-Package mdframed Info: Not enough space on this page on input line 217.
+Package mdframed Info: Not enough space on this page on input line 229.
 <../graphs/Decomposition of Inflation.png, id=18, 376.40625pt x 301.125pt>
 File: ../graphs/Decomposition of Inflation.png Graphic file (type png)
 <use ../graphs/Decomposition of Inflation.png>
-Package pdftex.def Info: ../graphs/Decomposition of Inflation.png  used on input line 219.
+Package pdftex.def Info: ../graphs/Decomposition of Inflation.png  used on input line 231.
 (pdftex.def)             Requested size: 234.87749pt x 187.90858pt.
 <../graphs/Decomposition of M1.png, id=20, 376.40625pt x 301.125pt>
 File: ../graphs/Decomposition of M1.png Graphic file (type png)
 <use ../graphs/Decomposition of M1.png>
-Package pdftex.def Info: ../graphs/Decomposition of M1.png  used on input line 220.
+Package pdftex.def Info: ../graphs/Decomposition of M1.png  used on input line 232.
 (pdftex.def)             Requested size: 234.87749pt x 187.90858pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 219--222
+Underfull \hbox (badness 10000) in paragraph at lines 231--234
 [][][]
  []
 
 LaTeX Font Info:    Font shape `OT1/opensans-TLF/m/n' will be
-(Font)              scaled to size 5.0pt on input line 235.
+(Font)              scaled to size 5.0pt on input line 247.
 [4 <../graphs/Decomposition of Inflation.png> <../graphs/Decomposition of M1.png>] (main2.aux) ) 
 Here is how much of TeX's memory you used:
  6795 strings out of 476410
@@ -543,7 +543,7 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  84i,9n,90p,577b,279s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Italic.pfb><C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Regular.pfb><C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/alexa/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb>
-Output written on main2.pdf (4 pages, 117697 bytes).
+Output written on main2.pdf (4 pages, 117959 bytes).
 PDF statistics:
  69 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

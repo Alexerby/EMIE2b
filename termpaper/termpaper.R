@@ -201,7 +201,7 @@ ADF.test(fod_m1)                # Can reject H_0: unit root @ 5% sig. level
 #          Test for cointegration (both I(1))       #
 #####################################################
 engle_granger <- lm(m1 ~ inflation)
-ADF.test(residuals(engle_granger))  
+ADF.test(residuals(engle_granger))
 # Can not reject that no cointegration exists,
 # compared to the critical value of the Engle-Granger
 # ADF statistic table (-3.41)
@@ -218,28 +218,56 @@ fod_m1 <- ts(fod_m1, start = 2004, frequency = 12)
 differenced_combined_ts <- ts.intersect(fod_inflation, fod_m1)
 
 
-VARselect(differenced_combined_ts, type = "both")$selection
-
-AIC <- VARselect(differenced_combined_ts, type = "both")$selection["AIC(n)"]
+model_lag_AIC <- VARselect(differenced_combined_ts, type = "both")$selection["AIC(n)"]
 
 #####################################################
 #                  Create VAR model                 #
 #####################################################
 
-var_result <- VAR(differenced_combined_ts, p = AIC, type = "both")
-
-
+var_result <- VAR(differenced_combined_ts, p = model_lag_AIC, type = "both")
 # Finish the diagnostic test of multivariate autocorrelation
 # which could not be finished during our diagnostics section.
 
+###############################
+# Multivariate portmanteau    #
+###############################
+mv_portmanteau_chi <- serial.test(var_result)$serial$statistic  # chi statistic
+degrees_of_freedom <- serial.test(var_result)$serial$parameter  # degrees of freedom
 
-# Multivariate Ljung-Box test
-serial.test(var_result)
+# Set significance level and calculate critical value
+significance_level <- 0.05
+critical_value <- qchisq(1 - significance_level, df = degrees_of_freedom)
+
+# Decision based on the test result
+if (mv_portmanteau_chi > critical_value) {
+  print("Rejecting the null hypothesis of autocorrelation in residuals.")
+} else {
+  print("Fail to reject the null hypothesis of autocorrelation in residuals.")
+}
+
+# Outcome is that we reject null of autocorrelation in residuals
+#
+# If we compare the p-value obtained from the multivariate Portmanteau
+# test to our chosen significance level, we would reach the same conclusion
+# regarding the null hypothesis.
+
 
 # Jarque-Bera test
 normality.test(var_result)$jb.mul$JB
 
+jb_statistic <- normality.test(var_result)$jb.mul$JB$statistic # JB statistic
+degrees_of_freedom <- normality.test(var_result)$jb.mul$JB$parameter # degrees of freedom
 
+critical_value <- qchisq(1 - significance_level, df = degrees_of_freedom)
+
+if (jb_statistic > critical_value) {
+  cat("Data in vector (m1, inflation) does not come from a normal distribution.")
+} else {
+  print("Data in vector (m1, inflation) comes from a normal distribution.")
+}
+
+
+# Our data does not come form a normal distribution
 
 causality(var_result, cause = "fod_m1")$Granger
 causality(var_result, cause = "fod_inflation")$Granger
